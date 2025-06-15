@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 2: Storage, Databases & Load Balancing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.min.css">
+    <style>
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal h1, .reveal h2, .reveal h3 {
+            color: #232F3E;
+            text-align: center;
+        }
+        .reveal .main-title {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            color: #232F3E;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .reveal .lab-callout {
+            background: #90EE90;
+            color: #2d5a27;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .reveal ul {
+            display: block;
+            margin-left: 1em;
+        }
+        .reveal .two-column {
+            display: flex;
+            gap: 2em;
+        }
+        .reveal .column {
+            flex: 1;
+        }
+        .reveal .three-column {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1em;
+        }
+        .reveal .small-text {
+            font-size: 0.75em;
+        }
+        .reveal .compact-list {
+            font-size: 0.85em;
+            line-height: 1.3;
+        }
+        .reveal .compact-list li {
+            margin-bottom: 0.3em;
+        }
+        .reveal .highlight-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007dbc;
+            padding: 0.8em;
+            margin: 0.8em 0;
+            font-size: 0.9em;
+        }
+        .reveal .mini-table {
+            font-size: 0.7em;
+        }
+        .reveal .mini-table td, .reveal .mini-table th {
+            padding: 4px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Title Slide -->
+            <section class="main-title">
+                <h1>Architecting on AWS</h1>
+                <h2>Day 2: Storage, Databases & Load Balancing</h2>
+                <p><strong>3-Day Architecture Course</strong></p>
+            </section>
+
+            <!-- Day 2 Overview -->
+            <section>
+                <h3>Day 2 Learning Path</h3>
+                <ul class="compact-list">
+                    <li><strong>Storage Services:</strong> S3, EBS, EFS characteristics and use cases</li>
+                    <li><strong>Database Services:</strong> RDS, DynamoDB, ElastiCache strategies</li>
+                    <li><strong>Load Balancing:</strong> ALB and NLB configuration and patterns</li>
+                    <li><strong>Auto Scaling:</strong> Horizontal scaling and policies</li>
+                    <li><strong>DNS and CDN:</strong> Route 53 and CloudFront implementation</li>
+                </ul>
+                <h3>Day 2 Labs</h3>
+                <ul class="compact-list">
+                    <li>Lab 3: RDS Multi-AZ Database Deployment</li>
+                    <li>Lab 4: S3 Static Website Hosting</li>
+                    <li>Lab 5: Auto Scaling and Load Balancing</li>
+                </ul>
+            </section>
+
+            <!-- Storage Services -->
+            <section class="main-title">
+                <h2>AWS Storage Services</h2>
+                <p>S3, EBS, and EFS for different storage requirements</p>
+            </section>
+
+            <section>
+                <h3>Storage Services Overview</h3>
+                <div class="three-column small-text">
+                    <div>
+                        <h4>Amazon S3:</h4>
+                        <ul class="compact-list">
+                            <li>Object-based storage</li>
+                            <li>99.999999999% (11 9's) durability</li>
+                            <li>Global namespace</li>
+                            <li>Regional resource</li>
+                            <li>REST API access</li>
+                            <li>WORM compliance</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Amazon EBS:</h4>
+                        <ul class="compact-list">
+                            <li>Block-based storage</li>
+                            <li>Attached to EC2 instances</li>
+                            <li>OS-level operations</li>
+                            <li>AZ-specific resource</li>
+                            <li>Operating system storage</li>
+                            <li>Database storage</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Amazon EFS:</h4>
+                        <ul class="compact-list">
+                            <li>Network file system</li>
+                            <li>Multiple EC2 mounts</li>
+                            <li>Spans multiple AZs</li>
+                            <li>Concurrent access</li>
+                            <li>Linux-compatible only</li>
+                            <li>Shared file storage</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Amazon S3 Storage Classes</h3>
+                <ul class="compact-list">
+                    <li><strong>S3 Standard:</strong> Frequently accessed data, low latency</li>
+                    <li><strong>S3 Standard-IA:</strong> Infrequently accessed, lower cost</li>
+                    <li><strong>S3 One Zone-IA:</strong> Single AZ, recreatable data</li>
+                    <li><strong>S3 Glacier Instant:</strong> Archive with instant retrieval</li>
+                    <li><strong>S3 Glacier Flexible:</strong> Archive with 1-12 hour retrieval</li>
+                    <li><strong>S3 Glacier Deep Archive:</strong> Long-term archive, 12+ hour retrieval</li>
+                    <li><strong>S3 Intelligent-Tiering:</strong> Automatic cost optimization</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>S3 Pricing Factors</h3>
+                <ul class="compact-list">
+                    <li><strong>Storage Amount:</strong> Per GB stored per month</li>
+                    <li><strong>Data Transfer:</strong> Outbound internet data transfer charges</li>
+                    <li><strong>Requests:</strong> GET, PUT, DELETE, and other API operations</li>
+                    <li><strong>Management Features:</strong> Lifecycle policies, replication</li>
+                </ul>
+                <div class="highlight-box">
+                    <strong>Cost Optimization:</strong> Use lifecycle policies to automatically transition objects to lower-cost storage classes based on access patterns.
+                </div>
+            </section>
+
+            <section>
+                <h3>S3 Use Cases and Features</h3>
+                <div class="two-column">
+                    <div class="column">
+                        <h4>Common Use Cases:</h4>
+                        <ul class="compact-list">
+                            <li>Static website hosting</li>
+                            <li>Data backup and archiving</li>
+                            <li>Content distribution</li>
+                            <li>Data lakes and analytics</li>
+                            <li>Application data storage</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>Key Features:</h4>
+                        <ul class="compact-list">
+                            <li>Versioning and lifecycle policies</li>
+                            <li>Cross-region replication</li>
+                            <li>Server-side encryption</li>
+                            <li>Access logging and monitoring</li>
+                            <li>Multi-part upload</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>EBS Volume Types</h3>
+                <div class="mini-table small-text">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="background-color: #f0f0f0;">
+                            <th style="border: 1px solid #ddd; padding: 4px;">Volume Type</th>
+                            <th style="border: 1px solid #ddd; padding: 4px;">Use Case</th>
+                            <th style="border: 1px solid #ddd; padding: 4px;">Performance</th>
+                            <th style="border: 1px solid #ddd; padding: 4px;">Boot Volume</th>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 4px;">gp3/gp2 (SSD)</td>
+                            <td style="border: 1px solid #ddd; padding: 4px;">General purpose</td>
+                            <td style="border: 1px solid #ddd; padding: 4px;">3,000-16,000 IOPS</td>
+                            <td style="border: 1px solid #ddd; padding: 4px;">Yes</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 4px;">io2/io1 (SSD)</td>
+                            <td style="border: 1px solid #ddd; padding: 4px;">High IOPS applications</td>
+                            <td style="border: 1px solid #ddd; padding: 4px;">Up to 64,000 IOPS</td>
+                            <td style="border: 1px solid #ddd; padding: 4px;">Yes</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 4px;">st1 (HDD)</td>
+                            <td style="border: 1px solid #ddd; padding: 4px;">Throughput optimized</td>
+                            <td style="border: 1px solid #ddd; padding: 4px;">Up to 500 MB/s</td>
+                            <td style="border: 1px solid #ddd; padding: 4px;">No</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 4px;">sc1 (HDD)</td>
+                            <td style="border: 1px solid #ddd; padding: 4px;">Cold storage</td>
+                            <td style="border: 1px solid #ddd; padding: 4px;">Up to 250 MB/s</td>
+                            <td style="border: 1px solid #ddd; padding: 4px;">No</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Lab 3 Callout -->
+            <section class="lab-callout">
+                <h2>🔬 Lab 3: RDS Multi-AZ Database</h2>
+                <h3>Deploy Secure Database Infrastructure</h3>
+                <p><strong>Duration: 60 minutes</strong></p>
+                <ul style="text-align: left; color: #2d5a27;">
+                    <li>Create RDS PostgreSQL with Multi-AZ deployment</li>
+                    <li>Configure database security groups and subnet groups</li>
+                    <li>Test database connectivity and failover</li>
+                </ul>
+            </section>
+
+            <!-- Database Services -->
+            <section class="main-title">
+                <h2>AWS Database Services</h2>
+                <p>Managed and scalable database solutions</p>
+            </section>
+
+            <section>
+                <h3>Database Service Categories</h3>
+                <div class="two-column">
+                    <div class="column">
+                        <h4>Relational (SQL):</h4>
+                        <ul class="compact-list">
+                            <li><strong>Amazon RDS:</strong> Managed relational databases</li>
+                            <li><strong>Amazon Aurora:</strong> Cloud-native SQL database</li>
+                            <li>Support for MySQL, PostgreSQL, Oracle, SQL Server</li>
+                            <li>ACID compliance and complex queries</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>NoSQL:</h4>
+                        <ul class="compact-list">
+                            <li><strong>DynamoDB:</strong> Key-value and document database</li>
+                            <li><strong>DocumentDB:</strong> MongoDB-compatible</li>
+                            <li>Flexible schema and horizontal scaling</li>
+                            <li>High performance for simple queries</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Amazon RDS Features</h3>
+                <ul class="compact-list">
+                    <li><strong>Multi-AZ Deployments:</strong> Automatic failover and high availability</li>
+                    <li><strong>Read Replicas:</strong> Scale read operations across regions</li>
+                    <li><strong>Automated Backups:</strong> Point-in-time recovery up to 35 days</li>
+                    <li><strong>Maintenance Windows:</strong> Scheduled patching and updates</li>
+                    <li><strong>Performance Insights:</strong> Database performance monitoring</li>
+                    <li><strong>Encryption:</strong> Data at rest and in transit protection</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>RDS Multi-AZ vs Read Replicas</h3>
+                <div class="two-column">
+                    <div class="column">
+                        <h4>Multi-AZ:</h4>
+                        <ul class="compact-list">
+                            <li>Synchronous replication</li>
+                            <li>Automatic failover</li>
+                            <li>Same region only</li>
+                            <li>Disaster recovery focus</li>
+                            <li>No additional read capacity</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>Read Replicas:</h4>
+                        <ul class="compact-list">
+                            <li>Asynchronous replication</li>
+                            <li>Manual promotion</li>
+                            <li>Cross-region support</li>
+                            <li>Performance scaling focus</li>
+                            <li>Increases read capacity</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Amazon DynamoDB</h3>
+                <ul class="compact-list">
+                    <li><strong>Serverless NoSQL:</strong> No server provisioning or management</li>
+                    <li><strong>Single-digit Millisecond Latency:</strong> Consistent performance at scale</li>
+                    <li><strong>Automatic Scaling:</strong> Handles traffic spikes automatically</li>
+                    <li><strong>Global Tables:</strong> Multi-region, multi-active database</li>
+                    <li><strong>Built-in Security:</strong> Encryption, IAM integration, VPC endpoints</li>
+                    <li><strong>Event-driven:</strong> DynamoDB Streams for real-time processing</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>DynamoDB Data Model</h3>
+                <div class="two-column">
+                    <div class="column">
+                        <h4>Core Components:</h4>
+                        <ul class="compact-list">
+                            <li><strong>Tables:</strong> Collections of items</li>
+                            <li><strong>Items:</strong> Individual records</li>
+                            <li><strong>Attributes:</strong> Name-value pairs</li>
+                            <li><strong>Primary Key:</strong> Partition key + optional sort key</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>Key Design Principles:</h4>
+                        <ul class="compact-list">
+                            <li>Avoid hot partitions</li>
+                            <li>Design for query patterns</li>
+                            <li>Use composite keys effectively</li>
+                            <li>Consider access patterns first</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Amazon ElastiCache</h3>
+                <ul class="compact-list">
+                    <li><strong>In-Memory Caching:</strong> Sub-millisecond response times</li>
+                    <li><strong>Two Engines:</strong> Redis and Memcached support</li>
+                    <li><strong>Use Cases:</strong> Session storage, real-time analytics, caching</li>
+                    <li><strong>Redis Features:</strong> Data persistence, pub/sub, clustering</li>
+                    <li><strong>Memcached Features:</strong> Simple caching, multi-threading</li>
+                    <li><strong>Integration:</strong> Works with RDS to reduce database load</li>
+                </ul>
+            </section>
+
+            <!-- Lab 4 Callout -->
+            <section class="lab-callout">
+                <h2>🔬 Lab 4: S3 Static Website</h2>
+                <h3>Configure S3 for Web Hosting</h3>
+                <p><strong>Duration: 30 minutes</strong></p>
+                <ul style="text-align: left; color: #2d5a27;">
+                    <li>Create S3 bucket and configure static website hosting</li>
+                    <li>Upload website content and set permissions</li>
+                    <li>Test website access and configure CloudFront</li>
+                </ul>
+            </section>
+
+            <!-- Load Balancing -->
+            <section class="main-title">
+                <h2>Elastic Load Balancing</h2>
+                <p>Distribute traffic across multiple targets for high availability</p>
+            </section>
+
+            <section>
+                <h3>Load Balancer Types</h3>
+                <div class="two-column">
+                    <div class="column">
+                        <h4>Application Load Balancer (ALB):</h4>
+                        <ul class="compact-list">
+                            <li>Layer 7 (HTTP/HTTPS)</li>
+                            <li>Advanced routing rules</li>
+                            <li>Host and path-based routing</li>
+                            <li>WebSocket and HTTP/2 support</li>
+                            <li>Integration with AWS WAF</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>Network Load Balancer (NLB):</h4>
+                        <ul class="compact-list">
+                            <li>Layer 4 (TCP/UDP)</li>
+                            <li>Ultra-high performance</li>
+                            <li>Static IP addresses</li>
+                            <li>Preserve source IP</li>
+                            <li>PrivateLink support</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Load Balancer Features</h3>
+                <ul class="compact-list">
+                    <li><strong>High Availability:</strong> Automatic distribution across AZs</li>
+                    <li><strong>Health Checks:</strong> Monitor target health and route traffic accordingly</li>
+                    <li><strong>Security Integration:</strong> SSL termination and security groups</li>
+                    <li><strong>Auto Scaling Integration:</strong> Dynamic target registration</li>
+                    <li><strong>Monitoring:</strong> CloudWatch metrics and access logs</li>
+                    <li><strong>Sticky Sessions:</strong> Route users to same target (ALB only)</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Target Groups</h3>
+                <ul class="compact-list">
+                    <li><strong>EC2 Instances:</strong> Register instances across multiple AZs</li>
+                    <li><strong>IP Addresses:</strong> Route to specific IP addresses</li>
+                    <li><strong>Lambda Functions:</strong> Serverless target integration</li>
+                    <li><strong>Application Load Balancer:</strong> Chain load balancers together</li>
+                </ul>
+                <div class="highlight-box">
+                    <strong>Health Checks:</strong> Configure custom health check paths, intervals, and thresholds to ensure traffic only goes to healthy targets.
+                </div>
+            </section>
+
+            <section>
+                <h3>Load Balancer Routing</h3>
+                <div class="two-column">
+                    <div class="column">
+                        <h4>ALB Routing Rules:</h4>
+                        <ul class="compact-list">
+                            <li>Host-based routing</li>
+                            <li>Path-based routing</li>
+                            <li>HTTP header routing</li>
+                            <li>Query string routing</li>
+                            <li>Source IP routing</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>Routing Algorithms:</h4>
+                        <ul class="compact-list">
+                            <li>Round robin (default)</li>
+                            <li>Least outstanding requests</li>
+                            <li>Weighted random</li>
+                            <li>Flow hash (NLB)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Auto Scaling -->
+            <section class="main-title">
+                <h2>Auto Scaling</h2>
+                <p>Automatically adjust capacity based on demand</p>
+            </section>
+
+            <section>
+                <h3>EC2 Auto Scaling</h3>
+                <ul class="compact-list">
+                    <li><strong>Launch Templates:</strong> Define instance configuration and AMI</li>
+                    <li><strong>Auto Scaling Groups:</strong> Manage instance lifecycle and capacity</li>
+                    <li><strong>Scaling Policies:</strong> Define when and how to scale</li>
+                    <li><strong>Health Checks:</strong> Replace unhealthy instances automatically</li>
+                    <li><strong>Load Balancer Integration:</strong> Automatic target registration</li>
+                    <li><strong>AZ Distribution:</strong> Maintain balance across Availability Zones</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Auto Scaling Policy Types</h3>
+                <div class="three-column small-text">
+                    <div>
+                        <h4>Scheduled Scaling:</h4>
+                        <ul class="compact-list">
+                            <li>Time-based scaling</li>
+                            <li>Predictable workloads</li>
+                            <li>Business hours patterns</li>
+                            <li>Recurring schedules</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Dynamic Scaling:</h4>
+                        <ul class="compact-list">
+                            <li>Metric-based scaling</li>
+                            <li>CPU, memory, network</li>
+                            <li>Custom CloudWatch metrics</li>
+                            <li>Target tracking</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Predictive Scaling:</h4>
+                        <ul class="compact-list">
+                            <li>Machine learning based</li>
+                            <li>Historical data analysis</li>
+                            <li>Proactive scaling</li>
+                            <li>Forecast demand</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Scaling for Stateless Applications</h3>
+                <ul class="compact-list">
+                    <li><strong>Session Storage:</strong> Use ElastiCache or DynamoDB for session data</li>
+                    <li><strong>Shared Storage:</strong> Store application data in S3 or EFS</li>
+                    <li><strong>Configuration Management:</strong> Use Parameter Store or Secrets Manager</li>
+                    <li><strong>Load Balancer Health Checks:</strong> Ensure proper application readiness</li>
+                    <li><strong>Graceful Shutdown:</strong> Handle termination signals properly</li>
+                </ul>
+            </section>
+
+            <!-- Lab 5 Callout -->
+            <section class="lab-callout">
+                <h2>🔬 Lab 5: Auto Scaling & Load Balancing</h2>
+                <h3>Build Scalable Web Infrastructure</h3>
+                <p><strong>Duration: 75 minutes</strong></p>
+                <ul style="text-align: left; color: #2d5a27;">
+                    <li>Create launch template and Auto Scaling group</li>
+                    <li>Configure Application Load Balancer with target groups</li>
+                    <li>Test scaling policies and high availability</li>
+                </ul>
+            </section>
+
+            <!-- DNS and CDN -->
+            <section class="main-title">
+                <h2>Route 53 and CloudFront</h2>
+                <p>DNS management and global content delivery</p>
+            </section>
+
+            <section>
+                <h3>Amazon Route 53</h3>
+                <ul class="compact-list">
+                    <li><strong>Managed DNS Service:</strong> Highly available and scalable DNS</li>
+                    <li><strong>Domain Registration:</strong> Register and manage domain names</li>
+                    <li><strong>Health Checking:</strong> Monitor endpoint health and route accordingly</li>
+                    <li><strong>Traffic Flow:</strong> Visual traffic policy management</li>
+                    <li><strong>Global Service:</strong> Anycast network for fast response times</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Route 53 Routing Policies</h3>
+                <div class="two-column">
+                    <div class="column">
+                        <h4>Basic Policies:</h4>
+                        <ul class="compact-list">
+                            <li><strong>Simple:</strong> Route to single resource</li>
+                            <li><strong>Weighted:</strong> Distribute traffic by percentage</li>
+                            <li><strong>Latency:</strong> Route to lowest latency region</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>Advanced Policies:</h4>
+                        <ul class="compact-list">
+                            <li><strong>Failover:</strong> Active/passive failover</li>
+                            <li><strong>Geolocation:</strong> Route based on user location</li>
+                            <li><strong>Multivalue:</strong> Return multiple healthy records</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Amazon CloudFront</h3>
+                <ul class="compact-list">
+                    <li><strong>Global CDN:</strong> 400+ edge locations worldwide</li>
+                    <li><strong>Performance:</strong> Cache content closer to users</li>
+                    <li><strong>Security:</strong> DDoS protection and AWS WAF integration</li>
+                    <li><strong>Cost Optimization:</strong> Reduce origin server load</li>
+                    <li><strong>SSL/TLS:</strong> Free SSL certificates via ACM</li>
+                    <li><strong>Real-time Metrics:</strong> Performance and usage analytics</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>CloudFront Origins and Behaviors</h3>
+                <div class="two-column">
+                    <div class="column">
+                        <h4>Origin Types:</h4>
+                        <ul class="compact-list">
+                            <li><strong>S3 Buckets:</strong> Static content delivery</li>
+                            <li><strong>Custom Origins:</strong> Web servers, load balancers</li>
+                            <li><strong>Origin Access Control:</strong> Secure S3 access</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>Cache Behaviors:</h4>
+                        <ul class="compact-list">
+                            <li><strong>Path Patterns:</strong> Route based on URL paths</li>
+                            <li><strong>TTL Settings:</strong> Control cache duration</li>
+                            <li><strong>Query String Handling:</strong> Cache based on parameters</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Content Delivery Optimization</h3>
+                <ul class="compact-list">
+                    <li><strong>Edge Caching:</strong> Store frequently accessed content at edge locations</li>
+                    <li><strong>Origin Shield:</strong> Additional caching layer to reduce origin load</li>
+                    <li><strong>Compression:</strong> Automatic gzip compression for text content</li>
+                    <li><strong>HTTP/2 Support:</strong> Improved performance for modern browsers</li>
+                    <li><strong>Real-time Logs:</strong> Monitor performance and user behavior</li>
+                </ul>
+            </section>
+
+            <!-- Architecture Patterns -->
+            <section class="main-title">
+                <h2>Common Architecture Patterns</h2>
+                <p>Combining services for optimal solutions</p>
+            </section>
+
+            <section>
+                <h3>Three-Tier Web Application</h3>
+                <ul class="compact-list">
+                    <li><strong>Presentation Tier:</strong> CloudFront + S3 for static content</li>
+                    <li><strong>Application Tier:</strong> ALB + Auto Scaling + EC2 instances</li>
+                    <li><strong>Data Tier:</strong> RDS Multi-AZ + ElastiCache + S3</li>
+                </ul>
+                <div class="highlight-box">
+                    <strong>Design Principles:</strong> Decouple tiers, scale horizontally, eliminate single points of failure, use managed services where possible.
+                </div>
+            </section>
+
+            <section>
+                <h3>Microservices Architecture</h3>
+                <ul class="compact-list">
+                    <li><strong>Service Discovery:</strong> Route 53 for internal DNS resolution</li>
+                    <li><strong>Load Balancing:</strong> ALB with path-based routing</li>
+                    <li><strong>Data Storage:</strong> Service-specific databases (RDS, DynamoDB)</li>
+                    <li><strong>Async Communication:</strong> SQS, SNS for decoupled messaging</li>
+                    <li><strong>Monitoring:</strong> CloudWatch for centralized logging and metrics</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Disaster Recovery Patterns</h3>
+                <div class="two-column">
+                    <div class="column">
+                        <h4>Multi-Region Setup:</h4>
+                        <ul class="compact-list">
+                            <li>Primary and secondary regions</li>
+                            <li>Cross-region data replication</li>
+                            <li>Route 53 health checks</li>
+                            <li>Automated failover</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>Data Protection:</h4>
+                        <ul class="compact-list">
+                            <li>RDS automated backups</li>
+                            <li>S3 cross-region replication</li>
+                            <li>EBS snapshots</li>
+                            <li>CloudFormation for infrastructure</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section>
+                <h3>Day 2 Key Takeaways</h3>
+                <ul class="compact-list">
+                    <li><strong>Storage Strategy:</strong> Choose the right storage service for each use case</li>
+                    <li><strong>Database Selection:</strong> Relational vs NoSQL based on requirements</li>
+                    <li><strong>Load Distribution:</strong> Use load balancers for high availability</li>
+                    <li><strong>Elastic Scaling:</strong> Auto Scaling for cost-effective performance</li>
+                    <li><strong>Global Delivery:</strong> CloudFront and Route 53 for optimal user experience</li>
+                    <li><strong>Integration Patterns:</strong> Combine services for robust architectures</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Tomorrow: Day 3 Topics</h3>
+                <ul class="compact-list">
+                    <li><strong>Monitoring & Logging:</strong> CloudWatch, CloudTrail comprehensive monitoring</li>
+                    <li><strong>Serverless Computing:</strong> Lambda, API Gateway, and event-driven architecture</li>
+                    <li><strong>Security & Compliance:</strong> IAM advanced features, encryption, compliance</li>
+                    <li><strong>Infrastructure as Code:</strong> CloudFormation and Terraform deployment</li>
+                    <li><strong>Architecture Review:</strong> Well-Architected Framework assessment</li>
+                </ul>
+            </section>
+
+            <section class="main-title">
+                <h1>Questions & Discussion</h1>
+                <p>Day 2: Storage, Databases & Load Balancing</p>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            center: false,
+            transition: 'slide'
+        });
+    </script>
+</body>
+</html>
