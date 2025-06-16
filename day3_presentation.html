@@ -91,11 +91,15 @@
                     <li><strong>Infrastructure as Code:</strong> CloudFormation and automation</li>
                     <li><strong>Well-Architected Review:</strong> Framework assessment and best practices</li>
                 </ul>
+            </section>
+
+            <!-- Day 3 Labs Overview -->
+            <section>
                 <h3>Day 3 Labs</h3>
                 <ul class="compact-list">
-                    <li>Lab 6: CloudWatch Monitoring and Alarms</li>
-                    <li>Lab 7: Serverless Application with Lambda</li>
-                    <li>Lab 8: Infrastructure as Code with CloudFormation</li>
+                    <li><strong>Lab 6:</strong> CloudWatch Monitoring and Alarms</li>
+                    <li><strong>Lab 7:</strong> Serverless Application with Lambda</li>
+                    <li><strong>Lab 8:</strong> Infrastructure as Code with CloudFormation</li>
                 </ul>
             </section>
 
@@ -105,82 +109,29 @@
                 <p>Comprehensive observability for AWS workloads</p>
             </section>
 
+            <!-- CloudWatch Overview -->
             <section>
-                <h3>AWS Monitoring Services Overview</h3>
-                <div class="three-column small-text">
-                    <div>
-                        <h4>CloudWatch:</h4>
-                        <ul class="compact-list">
-                            <li>Metrics and alarms</li>
-                            <li>Logs aggregation</li>
-                            <li>Dashboards</li>
-                            <li>Events and rules</li>
-                            <li>Application monitoring</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>CloudTrail:</h4>
-                        <ul class="compact-list">
-                            <li>API call logging</li>
-                            <li>Governance and audit</li>
-                            <li>Compliance tracking</li>
-                            <li>Security analysis</li>
-                            <li>Event history</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>AWS X-Ray:</h4>
-                        <ul class="compact-list">
-                            <li>Distributed tracing</li>
-                            <li>Performance analysis</li>
-                            <li>Request flow mapping</li>
-                            <li>Bottleneck identification</li>
-                            <li>Error root cause</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h3>Amazon CloudWatch Metrics</h3>
-                <div class="two-column">
-                    <div class="column">
-                        <h4>Default Metrics (Free):</h4>
-                        <ul class="compact-list">
-                            <li><strong>EC2:</strong> CPU, Network, Disk I/O</li>
-                            <li><strong>EBS:</strong> Volume read/write operations</li>
-                            <li><strong>S3:</strong> Request metrics, bucket size</li>
-                            <li><strong>RDS:</strong> Database connections, CPU</li>
-                            <li><strong>Lambda:</strong> Invocations, duration, errors</li>
-                        </ul>
-                    </div>
-                    <div class="column">
-                        <h4>Custom Metrics:</h4>
-                        <ul class="compact-list">
-                            <li>Application-specific metrics</li>
-                            <li>Business KPIs</li>
-                            <li>CloudWatch Agent metrics</li>
-                            <li>Memory and disk utilization</li>
-                            <li>Process-level monitoring</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h3>CloudWatch Alarms and Actions</h3>
+                <h3>Amazon CloudWatch</h3>
                 <ul class="compact-list">
-                    <li><strong>Metric Alarms:</strong> Trigger based on metric thresholds</li>
-                    <li><strong>Composite Alarms:</strong> Combine multiple alarms with AND/OR logic</li>
-                    <li><strong>Anomaly Detection:</strong> Machine learning-based threshold detection</li>
-                    <li><strong>Alarm Actions:</strong> SNS notifications, Auto Scaling, EC2 actions</li>
-                    <li><strong>Alarm States:</strong> OK, ALARM, INSUFFICIENT_DATA</li>
+                    <li><strong>Unified Monitoring:</strong> Metrics, logs, and alarms in one service</li>
+                    <li><strong>Real-time Insights:</strong> Monitor infrastructure and applications</li>
+                    <li><strong>Custom Metrics:</strong> Application-specific monitoring capabilities</li>
+                    <li><strong>Automated Actions:</strong> Auto Scaling and notification triggers</li>
                 </ul>
-                <div class="highlight-box">
-                    <strong>Best Practice:</strong> Set up alarms for critical metrics with appropriate thresholds and escalation procedures.
-                </div>
             </section>
 
+            <!-- CloudWatch Components -->
+            <section>
+                <h3>CloudWatch Core Components</h3>
+                <ul class="compact-list">
+                    <li><strong>Metrics:</strong> Time-ordered data points for resources</li>
+                    <li><strong>Alarms:</strong> Notifications when metrics breach thresholds</li>
+                    <li><strong>Dashboards:</strong> Customizable monitoring interfaces</li>
+                    <li><strong>Events:</strong> Near real-time stream of system events</li>
+                </ul>
+            </section>
+
+            <!-- CloudWatch Logs -->
             <section>
                 <h3>CloudWatch Logs</h3>
                 <ul class="compact-list">
@@ -193,6 +144,7 @@
                 </ul>
             </section>
 
+            <!-- CloudWatch Agent -->
             <section>
                 <h3>CloudWatch Agent</h3>
                 <div class="two-column">
@@ -219,6 +171,7 @@
                 </div>
             </section>
 
+            <!-- AWS CloudTrail -->
             <section>
                 <h3>AWS CloudTrail</h3>
                 <ul class="compact-list">
@@ -231,6 +184,7 @@
                 </ul>
             </section>
 
+            <!-- AWS X-Ray -->
             <section>
                 <h3>AWS X-Ray</h3>
                 <ul class="compact-list">
@@ -261,6 +215,7 @@
                 <p>Event-driven computing without server management</p>
             </section>
 
+            <!-- Serverless Benefits -->
             <section>
                 <h3>Serverless Computing Benefits</h3>
                 <ul class="compact-list">
@@ -268,127 +223,41 @@
                     <li><strong>Event-Driven Execution:</strong> Functions triggered by events</li>
                     <li><strong>Automatic Scaling:</strong> Scale from zero to thousands of requests</li>
                     <li><strong>Pay-per-Execution:</strong> Only pay when code runs</li>
-                    <li><strong>Built-in High Availability:</strong> Multi-AZ execution by default</li>
-                    <li><strong>Faster Time to Market:</strong> Reduced operational complexity</li>
+                    <li><strong>Built-in Availability:</strong> High availability by default</li>
                 </ul>
             </section>
 
+            <!-- AWS Lambda -->
             <section>
                 <h3>AWS Lambda</h3>
-                <div class="two-column">
-                    <div class="column">
-                        <h4>Key Features:</h4>
-                        <ul class="compact-list">
-                            <li>Support for multiple languages</li>
-                            <li>Custom runtime support</li>
-                            <li>Up to 15-minute execution time</li>
-                            <li>Memory from 128MB to 10GB</li>
-                            <li>Concurrent execution limits</li>
-                        </ul>
-                    </div>
-                    <div class="column">
-                        <h4>Event Sources:</h4>
-                        <ul class="compact-list">
-                            <li>S3 bucket notifications</li>
-                            <li>DynamoDB streams</li>
-                            <li>SQS and SNS messages</li>
-                            <li>API Gateway requests</li>
-                            <li>CloudWatch Events/EventBridge</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h3>Lambda Function Configuration</h3>
                 <ul class="compact-list">
-                    <li><strong>Runtime:</strong> Choose from supported languages (Python, Node.js, Java, etc.)</li>
-                    <li><strong>Memory Allocation:</strong> Affects CPU power and pricing</li>
-                    <li><strong>Timeout Settings:</strong> Maximum execution time (up to 15 minutes)</li>
-                    <li><strong>Environment Variables:</strong> Configuration without code changes</li>
-                    <li><strong>VPC Configuration:</strong> Access to private resources</li>
-                    <li><strong>Dead Letter Queues:</strong> Handle failed executions</li>
+                    <li><strong>Runtime Support:</strong> Python, Node.js, Java, C#, Go, Ruby</li>
+                    <li><strong>Event Sources:</strong> S3, DynamoDB, API Gateway, CloudWatch</li>
+                    <li><strong>Memory Allocation:</strong> 128 MB to 10,008 MB</li>
+                    <li><strong>Execution Duration:</strong> Up to 15 minutes per invocation</li>
+                    <li><strong>Concurrent Executions:</strong> 1,000 default (configurable)</li>
                 </ul>
             </section>
 
-            <section>
-                <h3>Lambda Pricing Model</h3>
-                <div class="two-column">
-                    <div class="column">
-                        <h4>Pricing Factors:</h4>
-                        <ul class="compact-list">
-                            <li><strong>Request Count:</strong> Number of invocations</li>
-                            <li><strong>Execution Duration:</strong> Rounded to nearest millisecond</li>
-                            <li><strong>Memory Allocation:</strong> Higher memory = higher cost</li>
-                            <li><strong>Free Tier:</strong> 1M requests and 400K GB-seconds/month</li>
-                        </ul>
-                    </div>
-                    <div class="column">
-                        <h4>Cost Optimization:</h4>
-                        <ul class="compact-list">
-                            <li>Right-size memory allocation</li>
-                            <li>Optimize execution time</li>
-                            <li>Use provisioned concurrency judiciously</li>
-                            <li>Leverage connection pooling</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
+            <!-- API Gateway -->
             <section>
                 <h3>Amazon API Gateway</h3>
                 <ul class="compact-list">
-                    <li><strong>Fully Managed:</strong> Create, publish, and manage APIs</li>
-                    <li><strong>Multiple API Types:</strong> REST, HTTP, and WebSocket APIs</li>
-                    <li><strong>Integration Options:</strong> Lambda, HTTP backends, AWS services</li>
-                    <li><strong>Security Features:</strong> IAM, Cognito, API keys, custom authorizers</li>
-                    <li><strong>Request/Response Transformation:</strong> Modify data in transit</li>
-                    <li><strong>Throttling and Caching:</strong> Protect backends and improve performance</li>
+                    <li><strong>REST APIs:</strong> Full-featured API management service</li>
+                    <li><strong>HTTP APIs:</strong> Lightweight, low-latency option</li>
+                    <li><strong>WebSocket APIs:</strong> Real-time two-way communication</li>
+                    <li><strong>Features:</strong> Authentication, throttling, caching, monitoring</li>
                 </ul>
             </section>
 
+            <!-- Serverless Patterns -->
             <section>
-                <h3>Serverless Event Processing Patterns</h3>
-                <div class="three-column small-text">
-                    <div>
-                        <h4>Request/Response:</h4>
-                        <ul class="compact-list">
-                            <li>API Gateway + Lambda</li>
-                            <li>Synchronous processing</li>
-                            <li>Web applications</li>
-                            <li>Mobile backends</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>Event-Driven:</h4>
-                        <ul class="compact-list">
-                            <li>S3 + Lambda triggers</li>
-                            <li>DynamoDB Streams</li>
-                            <li>Asynchronous processing</li>
-                            <li>Data transformation</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>Stream Processing:</h4>
-                        <ul class="compact-list">
-                            <li>Kinesis + Lambda</li>
-                            <li>Real-time analytics</li>
-                            <li>IoT data processing</li>
-                            <li>Log analysis</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h3>Serverless Application Example</h3>
+                <h3>Common Serverless Patterns</h3>
                 <ul class="compact-list">
-                    <li><strong>Frontend:</strong> S3 + CloudFront for static website hosting</li>
-                    <li><strong>API Layer:</strong> API Gateway for REST API management</li>
-                    <li><strong>Business Logic:</strong> Lambda functions for processing</li>
-                    <li><strong>Database:</strong> DynamoDB for NoSQL data storage</li>
-                    <li><strong>Authentication:</strong> Cognito for user management</li>
-                    <li><strong>File Storage:</strong> S3 for user-uploaded content</li>
+                    <li><strong>Web Applications:</strong> Static frontend + API Gateway + Lambda</li>
+                    <li><strong>Data Processing:</strong> S3 triggers + Lambda for file processing</li>
+                    <li><strong>Real-time Analytics:</strong> Kinesis + Lambda for stream processing</li>
+                    <li><strong>Scheduled Tasks:</strong> CloudWatch Events + Lambda for automation</li>
                 </ul>
             </section>
 
@@ -398,301 +267,122 @@
                 <h3>Build Event-Driven Lambda Functions</h3>
                 <p><strong>Duration: 60 minutes</strong></p>
                 <ul style="text-align: left; color: #2d5a27;">
-                    <li>Create Lambda functions with different triggers</li>
-                    <li>Configure API Gateway for RESTful APIs</li>
-                    <li>Implement event-driven processing patterns</li>
+                    <li>Create Lambda functions with API Gateway</li>
+                    <li>Implement DynamoDB integration</li>
+                    <li>Build S3 event-driven processing</li>
+                    <li>Deploy complete serverless web application</li>
                 </ul>
             </section>
 
             <!-- Security and Compliance -->
             <section class="main-title">
-                <h2>Security and Compliance</h2>
-                <p>Advanced security features and compliance frameworks</p>
+                <h2>Security & Compliance</h2>
+                <p>Advanced security practices and compliance frameworks</p>
             </section>
 
+            <!-- IAM Advanced Features -->
             <section>
                 <h3>Advanced IAM Features</h3>
-                <div class="two-column">
-                    <div class="column">
-                        <h4>Policy Types:</h4>
-                        <ul class="compact-list">
-                            <li><strong>Identity-based:</strong> Attached to users/groups/roles</li>
-                            <li><strong>Resource-based:</strong> Attached to resources</li>
-                            <li><strong>Permission Boundaries:</strong> Maximum permissions</li>
-                            <li><strong>Session Policies:</strong> Temporary limitations</li>
-                        </ul>
-                    </div>
-                    <div class="column">
-                        <h4>Advanced Concepts:</h4>
-                        <ul class="compact-list">
-                            <li><strong>Cross-account access:</strong> AssumeRole patterns</li>
-                            <li><strong>Service-linked roles:</strong> AWS service permissions</li>
-                            <li><strong>Policy conditions:</strong> Context-based access</li>
-                            <li><strong>Access Analyzer:</strong> Unintended access detection</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h3>AWS Security Services</h3>
-                <div class="three-column small-text">
-                    <div>
-                        <h4>Identity & Access:</h4>
-                        <ul class="compact-list">
-                            <li>IAM and IAM Identity Center</li>
-                            <li>AWS Cognito</li>
-                            <li>AWS Directory Service</li>
-                            <li>AWS Single Sign-On</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>Detection & Response:</h4>
-                        <ul class="compact-list">
-                            <li>GuardDuty threat detection</li>
-                            <li>Security Hub compliance</li>
-                            <li>Inspector vulnerability assessment</li>
-                            <li>Macie data discovery</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>Data Protection:</h4>
-                        <ul class="compact-list">
-                            <li>KMS key management</li>
-                            <li>Secrets Manager</li>
-                            <li>Certificate Manager</li>
-                            <li>CloudHSM hardware security</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h3>AWS Key Management Service (KMS)</h3>
                 <ul class="compact-list">
-                    <li><strong>Managed Service:</strong> Create and control encryption keys</li>
-                    <li><strong>Integration:</strong> Native encryption for AWS services</li>
-                    <li><strong>Key Types:</strong> Customer managed, AWS managed, AWS owned</li>
-                    <li><strong>Envelope Encryption:</strong> Encrypt data keys with master keys</li>
-                    <li><strong>Access Control:</strong> IAM policies and key policies</li>
-                    <li><strong>Audit Trail:</strong> CloudTrail logging for key usage</li>
+                    <li><strong>IAM Roles Anywhere:</strong> On-premises workload access</li>
+                    <li><strong>Permission Boundaries:</strong> Maximum permissions for entities</li>
+                    <li><strong>Access Analyzer:</strong> Identify unintended resource access</li>
+                    <li><strong>Credential Reports:</strong> Account-wide credential usage</li>
                 </ul>
             </section>
 
+            <!-- Encryption in AWS -->
             <section>
                 <h3>Encryption Strategies</h3>
-                <div class="two-column">
-                    <div class="column">
-                        <h4>Encryption at Rest:</h4>
-                        <ul class="compact-list">
-                            <li><strong>S3:</strong> SSE-S3, SSE-KMS, SSE-C</li>
-                            <li><strong>EBS:</strong> Volume encryption with KMS</li>
-                            <li><strong>RDS:</strong> Database encryption</li>
-                            <li><strong>DynamoDB:</strong> Table encryption</li>
-                        </ul>
-                    </div>
-                    <div class="column">
-                        <h4>Encryption in Transit:</h4>
-                        <ul class="compact-list">
-                            <li><strong>HTTPS/TLS:</strong> API and web traffic</li>
-                            <li><strong>VPN:</strong> Site-to-site connections</li>
-                            <li><strong>Direct Connect:</strong> Dedicated network encryption</li>
-                            <li><strong>Database:</strong> SSL/TLS connections</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h3>AWS Secrets Manager</h3>
                 <ul class="compact-list">
-                    <li><strong>Centralized Secrets:</strong> Store and retrieve passwords, API keys</li>
-                    <li><strong>Automatic Rotation:</strong> Scheduled password changes</li>
-                    <li><strong>Fine-grained Access:</strong> IAM policy integration</li>
-                    <li><strong>Audit and Monitoring:</strong> CloudTrail integration</li>
-                    <li><strong>Cross-Region Replication:</strong> Disaster recovery support</li>
-                    <li><strong>Programmatic Access:</strong> SDK and CLI integration</li>
+                    <li><strong>Encryption at Rest:</strong> S3, EBS, RDS, DynamoDB encryption</li>
+                    <li><strong>Encryption in Transit:</strong> TLS/SSL for data transmission</li>
+                    <li><strong>AWS KMS:</strong> Centralized key management service</li>
+                    <li><strong>Customer Managed Keys:</strong> Full control over encryption keys</li>
                 </ul>
             </section>
 
+            <!-- AWS Config -->
             <section>
-                <h3>Compliance Frameworks</h3>
-                <div class="two-column">
-                    <div class="column">
-                        <h4>Available Compliance:</h4>
-                        <ul class="compact-list">
-                            <li>SOC 1, 2, and 3</li>
-                            <li>PCI DSS compliance</li>
-                            <li>HIPAA eligibility</li>
-                            <li>GDPR readiness</li>
-                            <li>FedRAMP authorization</li>
-                        </ul>
-                    </div>
-                    <div class="column">
-                        <h4>Compliance Tools:</h4>
-                        <ul class="compact-list">
-                            <li>AWS Artifact for reports</li>
-                            <li>AWS Config for compliance rules</li>
-                            <li>Security Hub for standards</li>
-                            <li>Well-Architected reviews</li>
-                            <li>Third-party assessments</li>
-                        </ul>
-                    </div>
-                </div>
+                <h3>AWS Config</h3>
+                <ul class="compact-list">
+                    <li><strong>Configuration Recording:</strong> Track resource configurations</li>
+                    <li><strong>Compliance Rules:</strong> Automated compliance checking</li>
+                    <li><strong>Configuration History:</strong> Point-in-time configuration snapshots</li>
+                    <li><strong>Remediation Actions:</strong> Automated compliance restoration</li>
+                </ul>
+            </section>
+
+            <!-- AWS Security Hub -->
+            <section>
+                <h3>AWS Security Hub</h3>
+                <ul class="compact-list">
+                    <li><strong>Centralized Security:</strong> Unified security findings dashboard</li>
+                    <li><strong>Compliance Standards:</strong> CIS, PCI DSS, AWS Foundational</li>
+                    <li><strong>Finding Aggregation:</strong> Multiple security tool integration</li>
+                    <li><strong>Automated Remediation:</strong> Custom and AWS-managed actions</li>
+                </ul>
             </section>
 
             <!-- Infrastructure as Code -->
             <section class="main-title">
                 <h2>Infrastructure as Code</h2>
-                <p>Automate infrastructure deployment and management</p>
+                <p>Automated infrastructure deployment and management</p>
             </section>
 
+            <!-- Terraform Overview -->
+            <section>
+                <h3>Terraform</h3>
+                <ul class="compact-list">
+                    <li><strong>Multi-Cloud:</strong> Deploy across AWS, Azure, GCP, and more</li>
+                    <li><strong>HCL Language:</strong> Human-readable configuration syntax</li>
+                    <li><strong>State Management:</strong> Track resource state and dependencies</li>
+                    <li><strong>Plan and Apply:</strong> Preview changes before deployment</li>
+                </ul>
+            </section>
+
+            <!-- Infrastructure as Code Benefits -->
             <section>
                 <h3>Infrastructure as Code Benefits</h3>
                 <ul class="compact-list">
-                    <li><strong>Consistency:</strong> Identical environments across stages</li>
-                    <li><strong>Version Control:</strong> Track infrastructure changes</li>
+                    <li><strong>Consistency:</strong> Repeatable infrastructure deployments</li>
+                    <li><strong>Version Control:</strong> Track infrastructure changes over time</li>
                     <li><strong>Automation:</strong> Reduce manual configuration errors</li>
-                    <li><strong>Scalability:</strong> Deploy across multiple regions/accounts</li>
-                    <li><strong>Disaster Recovery:</strong> Rapid environment recreation</li>
-                    <li><strong>Cost Control:</strong> Easily tear down and rebuild environments</li>
+                    <li><strong>Documentation:</strong> Infrastructure as living documentation</li>
                 </ul>
             </section>
 
+            <!-- Terraform Features -->
             <section>
-                <h3>Infrastructure as Code Tools</h3>
-                <div class="two-column">
-                    <div class="column">
-                        <h4>AWS CloudFormation:</h4>
-                        <ul class="compact-list">
-                            <li>Native AWS IaC service</li>
-                            <li>JSON/YAML template format</li>
-                            <li>Stack-based management</li>
-                            <li>Change sets and rollbacks</li>
-                            <li>Cross-stack references</li>
-                        </ul>
-                    </div>
-                    <div class="column">
-                        <h4>HashiCorp Terraform:</h4>
-                        <ul class="compact-list">
-                            <li>Multi-cloud support</li>
-                            <li>HCL (HashiCorp Configuration Language)</li>
-                            <li>State management</li>
-                            <li>Provider ecosystem</li>
-                            <li>Plan and apply workflow</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h3>Terraform for AWS</h3>
+                <h3>Terraform Key Features</h3>
                 <ul class="compact-list">
-                    <li><strong>AWS Provider:</strong> Comprehensive resource coverage for AWS services</li>
-                    <li><strong>State Management:</strong> Tracks current infrastructure state</li>
-                    <li><strong>Plan Phase:</strong> Preview changes before applying</li>
-                    <li><strong>Modules:</strong> Reusable infrastructure components</li>
-                    <li><strong>Multi-Environment:</strong> Manage dev, staging, and production</li>
-                    <li><strong>Team Collaboration:</strong> Remote state backends and workspaces</li>
-                </ul>
-            </section>
-
-            <section>
-                <h3>IaC Best Practices</h3>
-                <ul class="compact-list">
-                    <li><strong>Version Control:</strong> Store all infrastructure code in Git</li>
-                    <li><strong>Environment Separation:</strong> Use different configurations per environment</li>
-                    <li><strong>Modular Design:</strong> Create reusable infrastructure modules</li>
-                    <li><strong>Testing:</strong> Validate configurations before deployment</li>
-                    <li><strong>Automation:</strong> Integrate with CI/CD pipelines</li>
-                    <li><strong>Documentation:</strong> Comment configurations and maintain README files</li>
-                </ul>
-            </section>
-
-            <section>
-                <h3>AWS CDK (Cloud Development Kit)</h3>
-                <ul class="compact-list">
-                    <li><strong>Code-Based IaC:</strong> Use familiar programming languages</li>
-                    <li><strong>High-Level Abstractions:</strong> Sensible defaults and patterns</li>
-                    <li><strong>Type Safety:</strong> Compile-time error checking</li>
-                    <li><strong>IDE Support:</strong> Auto-completion and inline documentation</li>
-                    <li><strong>Construct Library:</strong> Reusable infrastructure components</li>
-                    <li><strong>CloudFormation Integration:</strong> Compiles to CloudFormation</li>
+                    <li><strong>Provider Ecosystem:</strong> 3000+ providers for various services</li>
+                    <li><strong>Module System:</strong> Reusable infrastructure components</li>
+                    <li><strong>Remote State:</strong> Collaborative state management</li>
+                    <li><strong>Drift Detection:</strong> Identify configuration differences</li>
                 </ul>
             </section>
 
             <!-- Lab 8 Callout -->
             <section class="lab-callout">
                 <h2>🔬 Lab 8: Infrastructure as Code</h2>
-                <h3>Deploy with Terraform and CloudFormation</h3>
+                <h3>Deploy with Terraform</h3>
                 <p><strong>Duration: 45 minutes</strong></p>
                 <ul style="text-align: left; color: #2d5a27;">
-                    <li>Compare CloudFormation and Terraform approaches</li>
-                    <li>Create infrastructure using both tools</li>
-                    <li>Practice state management and updates</li>
+                    <li>Write Terraform configurations for AWS resources</li>
+                    <li>Deploy multi-tier architecture as code</li>
+                    <li>Implement state management and updates</li>
+                    <li>Use modules and variables for reusability</li>
                 </ul>
             </section>
 
-            <!-- Well-Architected Framework -->
+            <!-- Well-Architected Framework Review -->
             <section class="main-title">
-                <h2>AWS Well-Architected Framework</h2>
-                <p>Best practices for cloud architecture excellence</p>
+                <h2>Well-Architected Framework</h2>
+                <p>Continuous architecture improvement</p>
             </section>
 
-            <section>
-                <h3>The Six Pillars</h3>
-                <div class="three-column small-text">
-                    <div>
-                        <h4>Operational Excellence:</h4>
-                        <ul class="compact-list">
-                            <li>Operations as code</li>
-                            <li>Frequent, small changes</li>
-                            <li>Learn from failures</li>
-                            <li>Anticipate failure</li>
-                        </ul>
-                        <h4>Security:</h4>
-                        <ul class="compact-list">
-                            <li>Strong identity foundation</li>
-                            <li>Apply security at all layers</li>
-                            <li>Enable traceability</li>
-                            <li>Automate security best practices</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>Reliability:</h4>
-                        <ul class="compact-list">
-                            <li>Automatically recover from failure</li>
-                            <li>Test recovery procedures</li>
-                            <li>Scale horizontally</li>
-                            <li>Stop guessing capacity</li>
-                        </ul>
-                        <h4>Performance Efficiency:</h4>
-                        <ul class="compact-list">
-                            <li>Democratize advanced technologies</li>
-                            <li>Go global in minutes</li>
-                            <li>Use serverless architectures</li>
-                            <li>Experiment more often</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>Cost Optimization:</h4>
-                        <ul class="compact-list">
-                            <li>Implement cloud financial management</li>
-                            <li>Adopt consumption model</li>
-                            <li>Measure overall efficiency</li>
-                            <li>Stop spending on undifferentiated work</li>
-                        </ul>
-                        <h4>Sustainability:</h4>
-                        <ul class="compact-list">
-                            <li>Understand your impact</li>
-                            <li>Establish sustainability goals</li>
-                            <li>Maximize utilization</li>
-                            <li>Use managed services</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
+            <!-- Well-Architected Review Process -->
             <section>
                 <h3>Well-Architected Review Process</h3>
                 <ul class="compact-list">
@@ -705,6 +395,7 @@
                 </ul>
             </section>
 
+            <!-- Design Principles for Cloud -->
             <section>
                 <h3>Design Principles for the Cloud</h3>
                 <ul class="compact-list">
@@ -723,6 +414,7 @@
                 <p>Proven solutions for typical challenges</p>
             </section>
 
+            <!-- Multi-Tier Web Application -->
             <section>
                 <h3>Multi-Tier Web Application</h3>
                 <ul class="compact-list">
@@ -734,104 +426,59 @@
                 </ul>
             </section>
 
+            <!-- Serverless Microservices -->
             <section>
                 <h3>Serverless Microservices</h3>
                 <ul class="compact-list">
                     <li><strong>API Gateway:</strong> Unified API endpoint with routing</li>
                     <li><strong>Lambda Functions:</strong> Individual microservices</li>
-                    <li><strong>DynamoDB:</strong> NoSQL database per service</li>
-                    <li><strong>SQS/SNS:</strong> Asynchronous service communication</li>
-                    <li><strong>EventBridge:</strong> Event-driven architecture</li>
-                    <li><strong>Step Functions:</strong> Workflow orchestration</li>
+                    <li><strong>DynamoDB:</strong> NoSQL database for each service</li>
+                    <li><strong>Event-Driven:</strong> SQS/SNS for service communication</li>
+                    <li><strong>Monitoring:</strong> X-Ray for distributed tracing</li>
                 </ul>
             </section>
 
+            <!-- Data Analytics Pipeline -->
             <section>
-                <h3>Disaster Recovery Strategies</h3>
-                <div class="two-column">
-                    <div class="column">
-                        <h4>RTO/RPO Strategies:</h4>
-                        <ul class="compact-list">
-                            <li><strong>Backup & Restore:</strong> Low cost, higher RTO</li>
-                            <li><strong>Pilot Light:</strong> Core systems ready</li>
-                            <li><strong>Warm Standby:</strong> Scaled down version</li>
-                            <li><strong>Multi-Site Active:</strong> Full capacity, low RTO</li>
-                        </ul>
-                    </div>
-                    <div class="column">
-                        <h4>Implementation:</h4>
-                        <ul class="compact-list">
-                            <li>Cross-region data replication</li>
-                            <li>Route 53 health checks</li>
-                            <li>CloudFormation for infrastructure</li>
-                            <li>Automated failover procedures</li>
-                        </ul>
-                    </div>
-                </div>
+                <h3>Data Analytics Pipeline</h3>
+                <ul class="compact-list">
+                    <li><strong>Ingestion:</strong> Kinesis Data Streams for real-time data</li>
+                    <li><strong>Processing:</strong> Lambda for transformation and enrichment</li>
+                    <li><strong>Storage:</strong> S3 Data Lake with proper partitioning</li>
+                    <li><strong>Analytics:</strong> Athena for SQL queries on S3 data</li>
+                    <li><strong>Visualization:</strong> QuickSight for business intelligence</li>
+                </ul>
             </section>
 
-            <!-- Course Summary -->
+            <!-- Day 3 Summary -->
+            <section>
+                <h3>Day 3 Key Takeaways</h3>
+                <ul class="compact-list">
+                    <li><strong>Comprehensive Monitoring:</strong> CloudWatch, CloudTrail, X-Ray observability</li>
+                    <li><strong>Serverless Adoption:</strong> Event-driven, scalable, cost-effective computing</li>
+                    <li><strong>Security Excellence:</strong> Defense in depth with multiple layers</li>
+                    <li><strong>Infrastructure as Code:</strong> Automated, repeatable deployments</li>
+                    <li><strong>Continuous Improvement:</strong> Well-Architected Framework assessment</li>
+                </ul>
+            </section>
+
+            <!-- Course Conclusion -->
             <section>
                 <h3>3-Day Course Summary</h3>
-                <div class="three-column small-text">
-                    <div>
-                        <h4>Day 1 Foundation:</h4>
-                        <ul class="compact-list">
-                            <li>AWS global infrastructure</li>
-                            <li>IAM security model</li>
-                            <li>VPC networking</li>
-                            <li>EC2 compute options</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>Day 2 Services:</h4>
-                        <ul class="compact-list">
-                            <li>Storage strategies</li>
-                            <li>Database selection</li>
-                            <li>Load balancing patterns</li>
-                            <li>Auto scaling policies</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>Day 3 Advanced:</h4>
-                        <ul class="compact-list">
-                            <li>Monitoring and observability</li>
-                            <li>Serverless computing</li>
-                            <li>Security and compliance</li>
-                            <li>Infrastructure automation</li>
-                        </ul>
-                    </div>
+                <ul class="compact-list">
+                    <li><strong>Day 1:</strong> AWS fundamentals, compute, and networking foundation</li>
+                    <li><strong>Day 2:</strong> Storage, databases, and high availability patterns</li>
+                    <li><strong>Day 3:</strong> Monitoring, serverless, security, and automation</li>
+                </ul>
+                <div class="highlight-box">
+                    <strong>Next Steps:</strong> Apply these concepts in your own AWS environment, pursue AWS certifications, and continue learning with hands-on projects.
                 </div>
             </section>
 
-            <section>
-                <h3>Key Takeaways</h3>
-                <ul class="compact-list">
-                    <li><strong>Design Philosophy:</strong> Build resilient, scalable, and cost-effective solutions</li>
-                    <li><strong>Security First:</strong> Implement defense in depth with AWS security services</li>
-                    <li><strong>Operational Excellence:</strong> Automate operations and learn from failures</li>
-                    <li><strong>Cost Awareness:</strong> Choose the right services and optimize continuously</li>
-                    <li><strong>Innovation Focus:</strong> Leverage managed services to accelerate development</li>
-                    <li><strong>Continuous Learning:</strong> AWS evolves rapidly, stay current with best practices</li>
-                </ul>
-            </section>
-
-            <section>
-                <h3>Next Steps</h3>
-                <ul class="compact-list">
-                    <li><strong>Practice:</strong> Build projects using learned concepts</li>
-                    <li><strong>Certification:</strong> Pursue AWS Solutions Architect certification</li>
-                    <li><strong>Community:</strong> Join AWS user groups and forums</li>
-                    <li><strong>Documentation:</strong> Explore AWS white papers and best practices</li>
-                    <li><strong>Hands-on:</strong> Continue experimenting with new services</li>
-                    <li><strong>Well-Architected:</strong> Apply framework to existing workloads</li>
-                </ul>
-            </section>
-
+            <!-- Final Questions -->
             <section class="main-title">
-                <h1>Thank You!</h1>
-                <h2>Questions & Course Evaluation</h2>
-                <p>3-Day AWS Architecture Course Complete</p>
+                <h1>Questions & Discussion</h1>
+                <p>Day 3: Monitoring, Serverless & Security</p>
             </section>
         </div>
     </div>
