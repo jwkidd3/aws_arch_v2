@@ -203,34 +203,110 @@ You will implement comprehensive monitoring for your AWS infrastructure using Cl
 1. Create a script to publish custom metrics:
    ```bash
    cat << 'EOF' > custom-metrics.sh
-   #!/bin/bash
-   
-   # Get instance metadata
-   INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-   
-   # Get system metrics
-   LOAD_AVG=$(uptime | awk '{print $(NF-2)}' | sed 's/,//')
-   MEMORY_USAGE=$(free | grep Mem | awk '{printf "%.2f", $3/$2 * 100.0}')
-   DISK_USAGE=$(df / | tail -1 | awk '{print $5}' | sed 's/%//')
-   
-   # Get custom application metrics
-   ACTIVE_CONNECTIONS=$(netstat -an | grep :80 | grep ESTABLISHED | wc -l)
-   PROCESS_COUNT=$(ps aux | wc -l)
-   
-   # Publish custom metrics to CloudWatch
-   aws cloudwatch put-metric-data \
-       --namespace "Custom/Application" \
-       --metric-data \
-           MetricName=LoadAverage,Value=$LOAD_AVG,Unit=None,Dimensions=InstanceId=$INSTANCE_ID \
-           MetricName=MemoryUsagePercent,Value=$MEMORY_USAGE,Unit=Percent,Dimensions=InstanceId=$INSTANCE_ID \
-           MetricName=DiskUsagePercent,Value=$DISK_USAGE,Unit=Percent,Dimensions=InstanceId=$INSTANCE_ID \
-           MetricName=ActiveConnections,Value=$ACTIVE_CONNECTIONS,Unit=Count,Dimensions=InstanceId=$INSTANCE_ID \
-           MetricName=ProcessCount,Value=$PROCESS_COUNT,Unit=Count,Dimensions=InstanceId=$INSTANCE_ID
-   
-   echo "Custom metrics published at $(date)"
-   EOF
-   
-   chmod +x custom-metrics.sh
+#!/bin/bash
+
+# --- Get instance metadata using IMDSv2 ---
+# First, request a session token
+# X-aws-ec2-metadata-token-ttl-seconds: 21600 sets the token's time-to-live to 6 hours
+# --noproxy ensures we bypass any proxy for the metadata service IP
+TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" --noproxy "169.254.169.254")
+
+# Basic validation for TOKEN
+if [ -z "$TOKEN" ] || [[ "$TOKEN" == *"<"* ]] || [[ "$TOKEN" == *"?"* ]]; then
+    echo "ERROR: Failed to retrieve valid IMDSv2 TOKEN." >&2
+    echo "       Raw curl output for token request: '$TOKEN'" >&2
+    exit 1
+fi
+
+# Then, use the token to get the instance ID
+INSTANCE_ID=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id --noproxy "169.254.169.254")
+
+# Basic validation for INSTANCE_ID
+if [ -z "$INSTANCE_ID" ] || [[ "$INSTANCE_ID" == *"<"* ]] || [[ "$INSTANCE_ID" == *"?"* ]]; then
+    echo "ERROR: Failed to retrieve valid INSTANCE_ID from metadata service using IMDSv2 token." >&2
+    echo "       Raw curl output for instance-id request: '$INSTANCE_ID'" >&2
+    exit 1
+fi
+
+# Get system metrics
+LOAD_AVG=$(uptime | awk '{print $(NF-2)}' | sed 's/,//')
+MEMORY_USAGE=$(free | grep Mem | awk '{printf "%.2f", $3/$2 * 100.0}')
+DISK_USAGE=$(df / | tail -1 | awk '{print $5}' | sed 's/%//')
+
+# Get custom application metrics
+ACTIVE_CONNECTIONS=$(netstat -an | grep :80 | grep ESTABLISHED | wc -l)
+PROCESS_COUNT=$(ps aux | tail -n +2 | wc -l) # Exclude header from ps aux count
+
+# Construct the MetricData JSON
+# We use printf to create the JSON string for each metric and then join them
+# JSON requires values to be quoted, even numbers, when part of the string payload.
+METRIC_DATA_JSON="[
+    {
+        \"MetricName\": \"LoadAverage\",
+        \"Value\": $LOAD_AVG,
+        \"Unit\": \"None\",
+        \"Dimensions\": [
+            {
+                \"Name\": \"InstanceId\",
+                \"Value\": \"$INSTANCE_ID\"
+            }
+        ]
+    },
+    {
+        \"MetricName\": \"MemoryUsagePercent\",
+        \"Value\": $MEMORY_USAGE,
+        \"Unit\": \"Percent\",
+        \"Dimensions\": [
+            {
+                \"Name\": \"InstanceId\",
+                \"Value\": \"$INSTANCE_ID\"
+            }
+        ]
+    },
+    {
+        \"MetricName\": \"DiskUsagePercent\",
+        \"Value\": $DISK_USAGE,
+        \"Unit\": \"Percent\",
+        \"Dimensions\": [
+            {
+                \"Name\": \"InstanceId\",
+                \"Value\": \"$INSTANCE_ID\"
+            }
+        ]
+    },
+    {
+        \"MetricName\": \"ActiveConnections\",
+        \"Value\": $ACTIVE_CONNECTIONS,
+        \"Unit\": \"Count\",
+        \"Dimensions\": [
+            {
+                \"Name\": \"InstanceId\",
+                \"Value\": \"$INSTANCE_ID\"
+            }
+        ]
+    },
+    {
+        \"MetricName\": \"ProcessCount\",
+        \"Value\": $PROCESS_COUNT,
+        \"Unit\": \"Count\",
+        \"Dimensions\": [
+            {
+                \"Name\": \"InstanceId\",
+                \"Value\": \"$INSTANCE_ID\"
+            }
+        ]
+    }
+]"
+
+# Publish custom metrics to CloudWatch using the constructed JSON
+aws cloudwatch put-metric-data \
+    --namespace "Custom/Application" \
+    --metric-data "$METRIC_DATA_JSON"
+
+echo "Custom metrics published at $(date)"
+EOF
+
+chmod +x custom-metrics.sh
    ```
 
 2. Run the script to publish metrics:
