@@ -192,9 +192,9 @@ You will implement comprehensive monitoring for your AWS infrastructure using Cl
 2. Verify the agent is running:
    ```bash
    sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
-       -m ec2 \
-       -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json \
-       -a query
+    -m ec2 \
+    -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json \
+    -a status
    ```
 
 ### Part 3: Create Custom Metrics
