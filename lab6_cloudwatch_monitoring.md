@@ -201,7 +201,7 @@ You will implement comprehensive monitoring for your AWS infrastructure using Cl
 
 #### Step 1: Generate Custom Application Metrics
 1. Create a script to publish custom metrics:
-   ```bash
+```bash
    cat << 'EOF' > custom-metrics.sh
 #!/bin/bash
 
