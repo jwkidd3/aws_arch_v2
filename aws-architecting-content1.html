@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.min.css">
+    <style>
+        .reveal .slides section {
+            text-align: left;
+            font-size: 32px;
+            line-height: 1.4;
+        }
+        .reveal h1 {
+            font-size: 2.2em;
+            color: #232F3E;
+            text-align: center;
+            margin-bottom: 0.5em;
+        }
+        .reveal h2 {
+            font-size: 1.8em;
+            color: #232F3E;
+            text-align: center;
+            margin-bottom: 0.8em;
+        }
+        .reveal h3 {
+            font-size: 1.4em;
+            color: #232F3E;
+            margin-bottom: 0.5em;
+        }
+        .reveal .title-slide {
+            text-align: center;
+        }
+        .reveal .lab-callout {
+            background: #FF9900;
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 25px 0;
+            font-weight: bold;
+            font-size: 28px;
+        }
+        .reveal .pillars-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+        .reveal .pillar {
+            background: #f8f9fa;
+            border: 3px solid #FF9900;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px;
+            width: 220px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .reveal .architecture-diagram {
+            text-align: center;
+            background: #f0f8ff;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            font-size: 28px;
+        }
+        .reveal .key-points {
+            background: #e8f4fd;
+            padding: 20px;
+            border-left: 6px solid #FF9900;
+            margin: 20px 0;
+            font-size: 28px;
+        }
+        .reveal .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 24px;
+        }
+        .reveal .comparison-table th,
+        .reveal .comparison-table td {
+            border: 2px solid #ddd;
+            padding: 15px;
+            text-align: left;
+        }
+        .reveal .comparison-table th {
+            background-color: #232F3E;
+            color: white;
+            font-size: 26px;
+        }
+        .reveal .best-practices {
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            font-size: 26px;
+        }
+        .reveal .highlight-box {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 26px;
+        }
+        .reveal ul {
+            font-size: 28px;
+            line-height: 1.6;
+        }
+        .reveal li {
+            margin-bottom: 10px;
+        }
+        .reveal p {
+            font-size: 28px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- Title Slide -->
+            <section class="title-slide">
+                <h1>AWS Architecting Course</h1>
+                <h2>Content 1: Foundations & Core Services</h2>
+                <p>Building Robust Cloud Architectures</p>
+                <p><small>EC2 Fundamentals | IAM Security | VPC Networking | Well-Architected Framework</small></p>
+            </section>
+
+            <!-- Course Overview -->
+            <section>
+                <h2>Learning Path Overview</h2>
+                <div class="key-points">
+                    <h3>Today's Focus Areas</h3>
+                    <ul>
+                        <li><strong>Cloud Foundations:</strong> Core principles and global infrastructure</li>
+                        <li><strong>Compute Services:</strong> EC2 instance management and AMI strategies</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Course Overview Continued -->
+            <section>
+                <h2>Learning Path Overview - Part 2</h2>
+                <div class="key-points">
+                    <h3>Additional Focus Areas</h3>
+                    <ul>
+                        <li><strong>Security Framework:</strong> IAM policies, users, and access control</li>
+                        <li><strong>Network Architecture:</strong> VPC design and connectivity patterns</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Hands-on Learning:</strong> 4 practical labs to reinforce concepts
+                </div>
+            </section>
+
+            <!-- AWS Global Infrastructure -->
+            <section>
+                <h2>AWS Global Infrastructure</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>Building Blocks of AWS</h3>
+                    <p><strong>Regions → Availability Zones → Data Centers</strong></p>
+                </div>
+
+                <h3>Key Components</h3>
+                <ul>
+                    <li><strong>Regions:</strong> Geographic locations worldwide</li>
+                    <li><strong>Availability Zones:</strong> Isolated data center clusters</li>
+                </ul>
+            </section>
+
+            <!-- High Availability Design -->
+            <section>
+                <h2>High Availability Design Principles</h2>
+                
+                <div class="key-points">
+                    <h3>Core Requirement</h3>
+                    <p>High Availability requires deployment across <strong>at least 2 Availability Zones</strong> per region</p>
+                </div>
+
+                <h3>Benefits of Multi-AZ Architecture</h3>
+                <ul>
+                    <li><strong>Fault Tolerance:</strong> Survive AZ failures</li>
+                    <li><strong>Load Distribution:</strong> Spread traffic across zones</li>
+                </ul>
+            </section>
+
+            <!-- Service Scope -->
+            <section>
+                <h2>AWS Service Scope</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Scope</th>
+                            <th>Services</th>
+                            <th>Characteristics</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Global</strong></td>
+                            <td>Route53, IAM, CloudFront</td>
+                            <td>Accessible worldwide</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Regional</strong></td>
+                            <td>VPC, EFS, Load Balancer, S3</td>
+                            <td>Specific to one region</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Service Scope Continued -->
+            <section>
+                <h2>AWS Service Scope - Continued</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Scope</th>
+                            <th>Services</th>
+                            <th>Characteristics</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>AZ-Based</strong></td>
+                            <td>Subnet, EC2, EBS, NAT Gateway</td>
+                            <td>Tied to specific AZ</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight-box">
+                    <h3>Key Cost Principle</h3>
+                    <p><strong>Data IN to AWS is FREE, Data OUT is charged</strong></p>
+                </div>
+            </section>
+
+            <!-- Well-Architected Framework Introduction -->
+            <section>
+                <h2>AWS Well-Architected Framework</h2>
+                
+                <div class="key-points">
+                    <h3>Purpose & Benefits</h3>
+                    <ul>
+                        <li>Assess environments against AWS best practices</li>
+                        <li>Improve infrastructure practices and deployments</li>
+                        <li>Understand business impact of architectural decisions</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Well-Architected Framework Details -->
+            <section>
+                <h2>Well-Architected Framework Details</h2>
+                
+                <div class="highlight-box">
+                    <h3>What It Provides</h3>
+                    <ul>
+                        <li>Questions developed by AWS experts</li>
+                        <li>Framework to analyze your environment</li>
+                        <li>Does NOT provide implementation details or patterns</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Tool Available:</strong> AWS Well-Architected Tool for assessments
+                </div>
+            </section>
+
+            <!-- WAF Pillar 1: Operational Excellence -->
+            <section>
+                <h2>Pillar 1: Operational Excellence</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>🔧 Run and Monitor Systems</h3>
+                </div>
+
+                <div class="key-points">
+                    <h3>Core Principles</h3>
+                    <ul>
+                        <li><strong>Perform operations as code</strong></li>
+                        <li><strong>Make frequent, small, reversible changes</strong></li>
+                        <li><strong>Refine operations procedures frequently</strong></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- WAF Pillar 1 Details -->
+            <section>
+                <h2>Operational Excellence - Deep Dive</h2>
+                
+                <h3>Key Practices</h3>
+                <ul>
+                    <li><strong>Align with business objectives</strong></li>
+                    <li><strong>Give alerts and respond automatically</strong></li>
+                    <li><strong>Learn from failures and events</strong></li>
+                    <li><strong>Test responses to unexpected events</strong></li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Goal:</strong> Continuous improvement of processes and procedures
+                </div>
+            </section>
+
+            <!-- WAF Pillar 2: Security -->
+            <section>
+                <h2>Pillar 2: Security</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>🔒 Protect Data and Systems</h3>
+                </div>
+
+                <div class="key-points">
+                    <h3>Core Principles</h3>
+                    <ul>
+                        <li><strong>Apply security at all layers</strong></li>
+                        <li><strong>Principle of least privilege</strong></li>
+                        <li><strong>Enable traceability</strong></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- WAF Pillar 2 Details -->
+            <section>
+                <h2>Security - Deep Dive</h2>
+                
+                <h3>Key Practices</h3>
+                <ul>
+                    <li><strong>Multi-factor authentication (MFA)</strong></li>
+                    <li><strong>Automate security best practices</strong></li>
+                    <li><strong>Protect data in transit and at rest</strong></li>
+                    <li><strong>Keep people away from data</strong></li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Goal:</strong> Strong identity foundation and defense in depth
+                </div>
+            </section>
+
+            <!-- WAF Pillar 3: Reliability -->
+            <section>
+                <h2>Pillar 3: Reliability</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>⚡ Recover from Failures</h3>
+                </div>
+
+                <div class="key-points">
+                    <h3>Core Principles</h3>
+                    <ul>
+                        <li><strong>Automatically recover from failure</strong></li>
+                        <li><strong>Test recovery procedures</strong></li>
+                        <li><strong>Scale horizontally for resilience</strong></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- WAF Pillar 3 Details -->
+            <section>
+                <h2>Reliability - Deep Dive</h2>
+                
+                <h3>Key Practices</h3>
+                <ul>
+                    <li><strong>Test recovery procedures regularly</strong></li>
+                    <li><strong>Stop guessing capacity requirements</strong></li>
+                    <li><strong>Manage change through automation</strong></li>
+                    <li><strong>Scale to increase availability</strong></li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Goal:</strong> Systems that work consistently and recover quickly
+                </div>
+            </section>
+
+            <!-- WAF Pillar 4: Performance Efficiency -->
+            <section>
+                <h2>Pillar 4: Performance Efficiency</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>📈 Use Resources Efficiently</h3>
+                </div>
+
+                <div class="key-points">
+                    <h3>Core Principles</h3>
+                    <ul>
+                        <li><strong>Democratize advanced technologies</strong></li>
+                        <li><strong>Go global in minutes</strong></li>
+                        <li><strong>Use serverless architectures</strong></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- WAF Pillar 4 Details -->
+            <section>
+                <h2>Performance Efficiency - Deep Dive</h2>
+                
+                <h3>Key Practices</h3>
+                <ul>
+                    <li><strong>Make efficient use of resources</strong></li>
+                    <li><strong>Enable latency-based routing</strong></li>
+                    <li><strong>Adopt latest technologies and architectures</strong></li>
+                    <li><strong>Experiment often with new approaches</strong></li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Goal:</strong> Efficient use of computing resources
+                </div>
+            </section>
+
+            <!-- WAF Pillar 5: Cost Optimization -->
+            <section>
+                <h2>Pillar 5: Cost Optimization</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>💰 Avoid Unnecessary Costs</h3>
+                </div>
+
+                <div class="key-points">
+                    <h3>Core Principles</h3>
+                    <ul>
+                        <li><strong>Implement cloud financial management</strong></li>
+                        <li><strong>Adopt a consumption model</strong></li>
+                        <li><strong>Measure overall efficiency</strong></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- WAF Pillar 5 Details -->
+            <section>
+                <h2>Cost Optimization - Deep Dive</h2>
+                
+                <h3>Key Practices</h3>
+                <ul>
+                    <li><strong>Analyze and attribute expenditures</strong></li>
+                    <li><strong>Use cost-effective resources</strong></li>
+                    <li><strong>Stop guessing capacity needs</strong></li>
+                    <li><strong>Optimize over time</strong></li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Goal:</strong> Achieve business outcomes at lowest price point
+                </div>
+            </section>
+
+            <!-- WAF Pillar 6: Sustainability -->
+            <section>
+                <h2>Pillar 6: Sustainability</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>🌱 Minimize Environmental Impact</h3>
+                </div>
+
+                <div class="key-points">
+                    <h3>Core Principles</h3>
+                    <ul>
+                        <li><strong>Understand your impact</strong></li>
+                        <li><strong>Establish sustainability goals</strong></li>
+                        <li><strong>Maximize utilization</strong></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- WAF Pillar 6 Details -->
+            <section>
+                <h2>Sustainability - Deep Dive</h2>
+                
+                <h3>Key Practices</h3>
+                <ul>
+                    <li><strong>Adopt new, more efficient technologies</strong></li>
+                    <li><strong>Reduce downstream impact</strong></li>
+                    <li><strong>Anticipate and adopt new standards</strong></li>
+                    <li><strong>Use managed services to reduce impact</strong></li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Goal:</strong> Minimize environmental footprint of cloud workloads
+                </div>
+            </section>
+
+            <!-- Lab 1 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🔬 Lab 1: EC2 Basics & Instance Management</h2>
+                    <p>Duration: 45 minutes</p>
+                    <h3>Objectives:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Launch and configure EC2 instances</li>
+                        <li>Install and configure web servers</li>
+                        <li>Understand instance lifecycle</li>
+                        <li>Test connectivity and security groups</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- EC2 Fundamentals -->
+            <section>
+                <h2>Amazon EC2 Overview</h2>
+                
+                <h3>Core Components</h3>
+                <ul>
+                    <li><strong>Operating System:</strong> Linux, Windows, macOS options</li>
+                    <li><strong>Compute Power:</strong> CPU cores and performance levels</li>
+                    <li><strong>Memory:</strong> RAM allocation for applications</li>
+                </ul>
+            </section>
+
+            <!-- EC2 Components Continued -->
+            <section>
+                <h2>EC2 Components - Continued</h2>
+                
+                <h3>Additional Components</h3>
+                <ul>
+                    <li><strong>Storage:</strong> EBS (network) or Instance Store (local)</li>
+                    <li><strong>Network:</strong> Speed, public IP, security groups</li>
+                    <li><strong>Placement:</strong> AZ selection and tenancy options</li>
+                </ul>
+            </section>
+
+            <!-- EC2 Architecture -->
+            <section>
+                <h2>EC2 Architecture</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>EC2 Infrastructure Stack</h3>
+                    <p>Hypervisor → Virtual Machines → Network/Storage Integration</p>
+                </div>
+
+                <h3>Key Benefits</h3>
+                <ul>
+                    <li><strong>Scalability:</strong> Scale up or down as needed</li>
+                    <li><strong>Flexibility:</strong> Hundreds of instance types available</li>
+                </ul>
+            </section>
+
+            <!-- AMI Deep Dive -->
+            <section>
+                <h2>Amazon Machine Images (AMI)</h2>
+                
+                <h3>AMI Components</h3>
+                <ul>
+                    <li><strong>Root Volume:</strong> EBS snapshots with OS and applications</li>
+                    <li><strong>Launch Permissions:</strong> Controls who can use AMI</li>
+                    <li><strong>Block Device Mapping:</strong> Volume attachment configuration</li>
+                </ul>
+            </section>
+
+            <!-- AMI Benefits -->
+            <section>
+                <h2>Benefits of Custom AMIs</h2>
+                
+                <div class="key-points">
+                    <h3>Advantages</h3>
+                    <ul>
+                        <li><strong>Faster Boot Times:</strong> Pre-packaged software</li>
+                        <li><strong>Consistency:</strong> Standardized configurations</li>
+                        <li><strong>Scalability:</strong> Rapid instance deployment</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Golden AMI Approach:</strong> Use standardized AMIs for consistent deployments
+                </div>
+            </section>
+
+            <!-- EC2 Instance Lifecycle -->
+            <section>
+                <h2>EC2 Instance Lifecycle</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>State Transitions</h3>
+                    <p>pending → running ↔ stopped → terminated</p>
+                </div>
+
+                <h3>Important States</h3>
+                <ul>
+                    <li><strong>Pending:</strong> Instance is launching</li>
+                    <li><strong>Running:</strong> Instance is operational and billable</li>
+                </ul>
+            </section>
+
+            <!-- Instance Lifecycle Details -->
+            <section>
+                <h2>Instance Lifecycle - State Changes</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Host</th>
+                            <th>Public IP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Reboot</strong></td>
+                            <td>Same host</td>
+                            <td>No change</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Stop/Start</strong></td>
+                            <td>New host</td>
+                            <td>New address</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Instance Lifecycle Storage -->
+            <section>
+                <h2>Instance Lifecycle - Storage Impact</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Instance Store</th>
+                            <th>EBS Volume</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Reboot</strong></td>
+                            <td>Preserved</td>
+                            <td>Preserved</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Stop/Start</strong></td>
+                            <td>Erased</td>
+                            <td>Preserved</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Terminate</strong></td>
+                            <td>Erased</td>
+                            <td>Deleted (default)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- EC2 Purchase Options -->
+            <section>
+                <h2>EC2 Purchase Options</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Use Case</th>
+                            <th>Billing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>On-Demand</strong></td>
+                            <td>Development, testing</td>
+                            <td>Pay per hour/second</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reserved</strong></td>
+                            <td>Production workloads</td>
+                            <td>1 or 3 year terms</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Purchase Options Continued -->
+            <section>
+                <h2>Purchase Options - Continued</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Savings</th>
+                            <th>Availability</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Spot</strong></td>
+                            <td>Up to 90% savings</td>
+                            <td>Can be terminated</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dedicated</strong></td>
+                            <td>Varies</td>
+                            <td>Single-tenant hardware</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight-box">
+                    <strong>Spot Instance Note:</strong> 2-minute termination warning when market price exceeds bid
+                </div>
+            </section>
+
+            <!-- Lab 2 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🔬 Lab 2: AMI Creation & Instance Lifecycle</h2>
+                    <p>Duration: 45 minutes</p>
+                    <h3>Objectives:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Advanced instance lifecycle management</li>
+                        <li>Create versioned AMIs with enhancements</li>
+                        <li>Compare AMI vs User Data approaches</li>
+                        <li>Implement AMI best practices</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- IAM Introduction -->
+            <section>
+                <h2>Identity & Access Management (IAM)</h2>
+                
+                <div class="key-points">
+                    <h3>Core Principles</h3>
+                    <ul>
+                        <li><strong>Global Service:</strong> Applies across all regions</li>
+                        <li><strong>Principle of Least Privilege:</strong> Grant minimum required permissions</li>
+                        <li><strong>Defense in Depth:</strong> Multiple security layers</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- IAM Components -->
+            <section>
+                <h2>IAM Components</h2>
+                
+                <h3>Core Identity Components</h3>
+                <ul>
+                    <li><strong>Users:</strong> Individual people or applications</li>
+                    <li><strong>Groups:</strong> Collections of users with similar access needs</li>
+                    <li><strong>Roles:</strong> Temporary credentials for services</li>
+                    <li><strong>Policies:</strong> JSON documents defining permissions</li>
+                </ul>
+            </section>
+
+            <!-- IAM Policy Types -->
+            <section>
+                <h2>IAM Policy Types</h2>
+                
+                <h3>Different Policy Categories</h3>
+                <ul>
+                    <li><strong>AWS Managed:</strong> Created and maintained by AWS</li>
+                    <li><strong>Customer Managed:</strong> Created and maintained by you</li>
+                    <li><strong>Inline:</strong> Directly attached to single entity</li>
+                </ul>
+            </section>
+
+            <!-- IAM Policy Evaluation -->
+            <section>
+                <h2>IAM Policy Evaluation</h2>
+                
+                <div class="key-points">
+                    <h3>Policy Evaluation Logic</h3>
+                    <p><strong>DENY always wins</strong> when conflicting permissions exist</p>
+                </div>
+
+                <h3>Evaluation Process</h3>
+                <ul>
+                    <li><strong>Default:</strong> All requests denied by default</li>
+                    <li><strong>Explicit Allow:</strong> Must have explicit allow permission</li>
+                    <li><strong>Explicit Deny:</strong> Overrides any allow permissions</li>
+                </ul>
+            </section>
+
+            <!-- Policy Structure -->
+            <section>
+                <h2>IAM Policy Structure</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Element</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Effect</td>
+                            <td>✓</td>
+                            <td>Allow or Deny</td>
+                        </tr>
+                        <tr>
+                            <td>Action</td>
+                            <td>✓</td>
+                            <td>API calls to allow/deny</td>
+                        </tr>
+                        <tr>
+                            <td>Resource</td>
+                            <td>✓</td>
+                            <td>AWS resources affected</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- IAM Roles Introduction -->
+            <section>
+                <h2>IAM Roles</h2>
+                
+                <div class="key-points">
+                    <h3>When to Use Roles</h3>
+                    <ul>
+                        <li><strong>EC2 Instances:</strong> Access AWS services without credentials</li>
+                        <li><strong>Cross-Account Access:</strong> Grant access to other accounts</li>
+                        <li><strong>AWS Services:</strong> Allow services to act on your behalf</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Role Assumption Process -->
+            <section>
+                <h2>Role Assumption Process</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>How Roles Work</h3>
+                    <p>Temporary credentials → STS tokens → Time-limited access</p>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Security Benefit:</strong> No long-term credentials stored on instances
+                </div>
+            </section>
+
+            <!-- IAM Best Practices -->
+            <section>
+                <h2>IAM Best Practices</h2>
+                
+                <div class="best-practices">
+                    <h3>Security Recommendations</h3>
+                    <ul>
+                        <li><strong>Root Account:</strong> Never use for day-to-day operations</li>
+                        <li><strong>Individual Users:</strong> Create separate IAM users</li>
+                        <li><strong>Groups:</strong> Use groups to assign permissions</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- IAM Best Practices Continued -->
+            <section>
+                <h2>IAM Best Practices - Advanced</h2>
+                
+                <div class="best-practices">
+                    <h3>Advanced Security</h3>
+                    <ul>
+                        <li><strong>MFA:</strong> Enable multi-factor authentication</li>
+                        <li><strong>Roles for Applications:</strong> Use roles vs embedded credentials</li>
+                        <li><strong>Regular Rotation:</strong> Rotate access keys regularly</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Lab 3 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🔬 Lab 3: IAM Configuration & Security</h2>
+                    <p>Duration: 45 minutes</p>
+                    <h3>Objectives:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Create IAM users, groups, and policies</li>
+                        <li>Configure IAM roles for EC2 access</li>
+                        <li>Implement MFA for enhanced security</li>
+                        <li>Test permission boundaries and effects</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- VPC Overview -->
+            <section>
+                <h2>Amazon Virtual Private Cloud (VPC)</h2>
+                
+                <div class="key-points">
+                    <h3>VPC Fundamentals</h3>
+                    <ul>
+                        <li><strong>Isolated Network:</strong> Your own section of AWS cloud</li>
+                        <li><strong>Complete Control:</strong> IP ranges, subnets, routing</li>
+                        <li><strong>Security:</strong> Multiple layers of security controls</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- CIDR Planning -->
+            <section>
+                <h2>VPC CIDR Planning</h2>
+                
+                <h3>CIDR Notation</h3>
+                <ul>
+                    <li><strong>Range:</strong> /16 (65,536 IPs) to /28 (16 IPs)</li>
+                    <li><strong>Planning:</strong> Choose ranges that don't overlap</li>
+                    <li><strong>Growth:</strong> Allow room for future expansion</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Best Practice:</strong> Use RFC 1918 private IP ranges<br>
+                    10.0.0.0/16, 172.16.0.0/16, 192.168.0.0/16
+                </div>
+            </section>
+
+            <!-- VPC Subnets -->
+            <section>
+                <h2>VPC Subnets</h2>
+                
+                <h3>Subnet Types</h3>
+                <ul>
+                    <li><strong>Public Subnets:</strong> Direct route to Internet Gateway</li>
+                    <li><strong>Private Subnets:</strong> No direct internet access</li>
+                    <li><strong>AZ-Specific:</strong> Each subnet exists in one AZ</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Design Rule:</strong> Always deploy across multiple AZs for high availability
+                </div>
+            </section>
+
+            <!-- VPC Gateways -->
+            <section>
+                <h2>VPC Gateways & Routing</h2>
+                
+                <h3>Gateway Components</h3>
+                <ul>
+                    <li><strong>Internet Gateway:</strong> Connects VPC to internet</li>
+                    <li><strong>NAT Gateway:</strong> Outbound internet for private subnets</li>
+                    <li><strong>Route Tables:</strong> Control traffic routing decisions</li>
+                </ul>
+            </section>
+
+            <!-- VPC Architecture Pattern -->
+            <section>
+                <h2>Typical VPC Architecture</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>Three-Tier Architecture</h3>
+                    <p>Public Subnet (web) → Private Subnet (app) → Private Subnet (database)</p>
+                </div>
+
+                <h3>Architecture Benefits</h3>
+                <ul>
+                    <li><strong>Security:</strong> Database tier isolated from internet</li>
+                    <li><strong>Scalability:</strong> Each tier scales independently</li>
+                </ul>
+            </section>
+
+            <!-- Security Groups vs NACLs -->
+            <section>
+                <h2>Security Groups vs NACLs</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Security Groups</th>
+                            <th>Network ACLs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Level</strong></td>
+                            <td>Instance level</td>
+                            <td>Subnet level</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rules</strong></td>
+                            <td>Allow rules only</td>
+                            <td>Allow and Deny rules</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Security Comparison Continued -->
+            <section>
+                <h2>Security Groups vs NACLs - Continued</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Security Groups</th>
+                            <th>Network ACLs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>State</strong></td>
+                            <td>Stateful</td>
+                            <td>Stateless</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Evaluation</strong></td>
+                            <td>All rules evaluated</td>
+                            <td>Rules processed in order</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="key-points">
+                    <h3>Defense in Depth</h3>
+                    <p>Use both Security Groups and NACLs for layered security</p>
+                </div>
+            </section>
+
+            <!-- VPC Endpoints -->
+            <section>
+                <h2>VPC Endpoints</h2>
+                
+                <h3>Endpoint Types</h3>
+                <ul>
+                    <li><strong>Gateway Endpoints:</strong> S3 and DynamoDB</li>
+                    <li><strong>Interface Endpoints:</strong> Most other AWS services</li>
+                    <li><strong>Benefit:</strong> Private connectivity without internet routing</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Cost Optimization:</strong> VPC Endpoints reduce data transfer costs
+                </div>
+            </section>
+
+            <!-- Security Group Chaining -->
+            <section>
+                <h2>Security Group Chaining</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>Tiered Security Pattern</h3>
+                    <p>Web Tier SG → App Tier SG → Database Tier SG</p>
+                </div>
+
+                <h3>Chaining Benefits</h3>
+                <ul>
+                    <li><strong>Scalability:</strong> No IP address management required</li>
+                    <li><strong>Security:</strong> Each tier references previous tier's SG</li>
+                </ul>
+            </section>
+
+            <!-- Lab 4 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🔬 Lab 4: VPC Networking Setup</h2>
+                    <p>Duration: 45 minutes</p>
+                    <h3>Objectives:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Create custom VPC with public/private subnets</li>
+                        <li>Configure Internet Gateway and NAT Gateway</li>
+                        <li>Set up route tables and security groups</li>
+                        <li>Test connectivity between tiers</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Monitoring Introduction -->
+            <section>
+                <h2>AWS Monitoring & Management</h2>
+                
+                <h3>Management Tools Categories</h3>
+                <ul>
+                    <li><strong>Provisioning:</strong> CloudFormation, Service Catalog</li>
+                    <li><strong>Operations:</strong> Systems Manager, CloudTrail, Config</li>
+                    <li><strong>Configuration:</strong> OpsWorks (Chef, Puppet)</li>
+                    <li><strong>Monitoring:</strong> CloudWatch, X-Ray</li>
+                </ul>
+            </section>
+
+            <!-- CloudWatch Overview -->
+            <section>
+                <h2>Amazon CloudWatch</h2>
+                
+                <div class="key-points">
+                    <h3>CloudWatch Capabilities</h3>
+                    <ul>
+                        <li>Monitor AWS resources and applications</li>
+                        <li>Collect logs, metrics, and events</li>
+                        <li>Set up alarms and automated responses</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- CloudWatch Features -->
+            <section>
+                <h2>CloudWatch Key Features</h2>
+                
+                <h3>Core Components</h3>
+                <ul>
+                    <li><strong>Metrics:</strong> Performance data from AWS services</li>
+                    <li><strong>Logs:</strong> Centralized log management</li>
+                    <li><strong>Alarms:</strong> Notifications and automated actions</li>
+                    <li><strong>Events:</strong> System events and scheduled actions</li>
+                </ul>
+            </section>
+
+            <!-- CloudTrail Basics -->
+            <section>
+                <h2>AWS CloudTrail</h2>
+                
+                <div class="key-points">
+                    <h3>Purpose</h3>
+                    <ul>
+                        <li><strong>Governance:</strong> Track API calls and user activity</li>
+                        <li><strong>Compliance:</strong> Meet audit requirements</li>
+                        <li><strong>Security:</strong> Investigate security incidents</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- CloudTrail Details -->
+            <section>
+                <h2>CloudTrail Recording</h2>
+                
+                <h3>What CloudTrail Records</h3>
+                <ul>
+                    <li>API calls from AWS Management Console</li>
+                    <li>AWS CLI and SDK operations</li>
+                    <li>Service-to-service calls</li>
+                    <li>Source IP addresses and timestamps</li>
+                </ul>
+            </section>
+
+            <!-- Cost Management Principles -->
+            <section>
+                <h2>Cost Management Principles</h2>
+                
+                <div class="key-points">
+                    <h3>Data Transfer Costs</h3>
+                    <ul>
+                        <li><strong>Inbound:</strong> Data INTO AWS is free</li>
+                        <li><strong>Outbound:</strong> Data OUT of AWS is charged</li>
+                        <li><strong>Inter-AZ:</strong> Charges apply for cross-AZ traffic</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Resource Optimization -->
+            <section>
+                <h2>Resource Optimization Strategies</h2>
+                
+                <h3>Cost Optimization Techniques</h3>
+                <ul>
+                    <li><strong>Right-sizing:</strong> Choose appropriate instance types</li>
+                    <li><strong>Reserved Capacity:</strong> Commit for predictable workloads</li>
+                    <li><strong>Spot Instances:</strong> Use for fault-tolerant applications</li>
+                    <li><strong>Auto Scaling:</strong> Match capacity to demand</li>
+                </ul>
+            </section>
+
+            <!-- Review & Takeaways -->
+            <section>
+                <h2>Key Takeaways</h2>
+                
+                <div class="key-points">
+                    <h3>Fundamental Concepts Mastered</h3>
+                    <ul>
+                        <li><strong>Well-Architected Framework:</strong> 6 pillars for optimal design</li>
+                        <li><strong>EC2:</strong> Instance lifecycle, AMIs, and purchase options</li>
+                        <li><strong>IAM:</strong> Users, roles, policies, security best practices</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Next Steps -->
+            <section>
+                <h2>Next Session Preview</h2>
+                
+                <div class="highlight-box">
+                    <h3>Content 2 Topics</h3>
+                    <ul>
+                        <li>Storage services (S3, EBS) and data management</li>
+                        <li>Database services (RDS, DynamoDB) and patterns</li>
+                        <li>Load balancing and application architectures</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Q&A Slide -->
+            <section class="title-slide">
+                <h1>Questions & Discussion</h1>
+                <h2>Preparing for Hands-on Labs</h2>
+                <div class="key-points">
+                    <h3>Remember:</h3>
+                    <ul>
+                        <li>Replace USERNAME with your assigned identifier</li>
+                        <li>Follow cleanup procedures to avoid charges</li>
+                        <li>Document issues and solutions for learning</li>
+                    </ul>
+                </div>
+            </section>
+
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            width: 1200,
+            height: 800,
+            margin: 0.1,
+            minScale: 0.2,
+            maxScale: 1.5
+        });
+    </script>
+</body>
+</html>

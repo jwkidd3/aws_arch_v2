@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.min.css">
+    <style>
+        .reveal .slides section {
+            text-align: left;
+            font-size: 32px;
+            line-height: 1.4;
+        }
+        .reveal h1 {
+            font-size: 2.2em;
+            color: #232F3E;
+            text-align: center;
+            margin-bottom: 0.5em;
+        }
+        .reveal h2 {
+            font-size: 1.8em;
+            color: #232F3E;
+            text-align: center;
+            margin-bottom: 0.8em;
+        }
+        .reveal h3 {
+            font-size: 1.4em;
+            color: #232F3E;
+            margin-bottom: 0.5em;
+        }
+        .reveal .title-slide {
+            text-align: center;
+        }
+        .reveal .lab-callout {
+            background: #FF9900;
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 25px 0;
+            font-weight: bold;
+            font-size: 28px;
+        }
+        .reveal .pillars-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+        .reveal .pillar {
+            background: #f8f9fa;
+            border: 3px solid #FF9900;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px;
+            width: 220px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .reveal .architecture-diagram {
+            text-align: center;
+            background: #f0f8ff;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            font-size: 28px;
+        }
+        .reveal .key-points {
+            background: #e8f4fd;
+            padding: 20px;
+            border-left: 6px solid #FF9900;
+            margin: 20px 0;
+            font-size: 28px;
+        }
+        .reveal .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 24px;
+        }
+        .reveal .comparison-table th,
+        .reveal .comparison-table td {
+            border: 2px solid #ddd;
+            padding: 15px;
+            text-align: left;
+        }
+        .reveal .comparison-table th {
+            background-color: #232F3E;
+            color: white;
+            font-size: 26px;
+        }
+        .reveal .best-practices {
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            font-size: 26px;
+        }
+        .reveal .highlight-box {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 26px;
+        }
+        .reveal ul {
+            font-size: 28px;
+            line-height: 1.6;
+        }
+        .reveal li {
+            margin-bottom: 10px;
+        }
+        .reveal p {
+            font-size: 28px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- Title Slide -->
+            <section class="title-slide">
+                <h1>AWS Architecting Course</h1>
+                <h2>Content 3: Auto Scaling, Serverless & Advanced Topics</h2>
+                <p>Production-Ready Cloud Solutions</p>
+                <p><small>Auto Scaling | CloudWatch Monitoring | Lambda & API Gateway | Infrastructure as Code</small></p>
+            </section>
+
+            <!-- Learning Overview -->
+            <section>
+                <h2>Content 3 Learning Path</h2>
+                <div class="key-points">
+                    <h3>Advanced Topics Focus</h3>
+                    <ul>
+                        <li><strong>Dynamic Scaling:</strong> Auto Scaling groups and launch templates</li>
+                        <li><strong>Observability:</strong> CloudWatch monitoring and alerting</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Learning Path Continued -->
+            <section>
+                <h2>Content 3 Learning Path - Part 2</h2>
+                <div class="key-points">
+                    <h3>Modern Architecture Focus</h3>
+                    <ul>
+                        <li><strong>Serverless Computing:</strong> Lambda functions and API Gateway</li>
+                        <li><strong>Infrastructure as Code:</strong> Terraform for automation</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Production Readiness:</strong> 4 labs covering enterprise-grade solutions
+                </div>
+            </section>
+
+            <!-- Auto Scaling Introduction -->
+            <section>
+                <h2>Amazon EC2 Auto Scaling</h2>
+                
+                <div class="key-points">
+                    <h3>Auto Scaling Purpose</h3>
+                    <ul>
+                        <li><strong>Dynamic Capacity:</strong> Correct number of instances for load</li>
+                        <li><strong>Cost Optimization:</strong> Scale out when needed, scale in when not</li>
+                        <li><strong>High Availability:</strong> Replace unhealthy instances automatically</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Auto Scaling Components -->
+            <section>
+                <h2>Auto Scaling Components</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>Three Key Components</h3>
+                    <p>Launch Template → Auto Scaling Group → Scaling Policies</p>
+                </div>
+
+                <h3>Component Functions</h3>
+                <ul>
+                    <li><strong>Launch Template:</strong> Instance configuration blueprint</li>
+                    <li><strong>Auto Scaling Group:</strong> Capacity management and placement</li>
+                </ul>
+            </section>
+
+            <!-- Auto Scaling Group Details -->
+            <section>
+                <h2>Auto Scaling Groups</h2>
+                
+                <h3>ASG Configuration</h3>
+                <ul>
+                    <li><strong>Desired Capacity:</strong> Target number of instances</li>
+                    <li><strong>Minimum Capacity:</strong> Lower limit for scaling</li>
+                    <li><strong>Maximum Capacity:</strong> Upper limit for scaling</li>
+                    <li><strong>Availability Zones:</strong> Instance distribution across AZs</li>
+                </ul>
+            </section>
+
+            <!-- Launch Templates -->
+            <section>
+                <h2>Launch Templates vs Launch Configurations</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Launch Template</th>
+                            <th>Launch Configuration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Versioning</strong></td>
+                            <td>Supported</td>
+                            <td>Not supported</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mixed Instance Types</strong></td>
+                            <td>Yes</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Spot Instances</strong></td>
+                            <td>Advanced support</td>
+                            <td>Basic support</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Launch Template Benefits -->
+            <section>
+                <h2>Launch Template Advantages</h2>
+                
+                <div class="best-practices">
+                    <h3>Modern Features</h3>
+                    <ul>
+                        <li><strong>Versioning:</strong> Track and manage template changes</li>
+                        <li><strong>Parameter Inheritance:</strong> Override specific parameters</li>
+                        <li><strong>T2/T3 Unlimited:</strong> Burst performance configuration</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Best Practice:</strong> Always use Launch Templates for new Auto Scaling implementations
+                </div>
+            </section>
+
+            <!-- Scaling Policies -->
+            <section>
+                <h2>Auto Scaling Policies</h2>
+                
+                <h3>Policy Types</h3>
+                <ul>
+                    <li><strong>Target Tracking:</strong> Maintain specific metric value</li>
+                    <li><strong>Step Scaling:</strong> Scale in steps based on metric thresholds</li>
+                    <li><strong>Simple Scaling:</strong> Single scaling action per alarm</li>
+                    <li><strong>Scheduled Scaling:</strong> Predictable scaling patterns</li>
+                </ul>
+            </section>
+
+            <!-- Target Tracking Scaling -->
+            <section>
+                <h2>Target Tracking Scaling</h2>
+                
+                <div class="key-points">
+                    <h3>How Target Tracking Works</h3>
+                    <ul>
+                        <li><strong>Set Target Value:</strong> e.g., 50% CPU utilization</li>
+                        <li><strong>Automatic Scaling:</strong> AWS manages scale-out and scale-in</li>
+                        <li><strong>CloudWatch Integration:</strong> Uses CloudWatch metrics</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Target Tracking Metrics -->
+            <section>
+                <h2>Target Tracking Metrics</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Use Case</th>
+                            <th>Target Value Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>CPU Utilization</strong></td>
+                            <td>General workloads</td>
+                            <td>50%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Request Count Per Target</strong></td>
+                            <td>Web applications</td>
+                            <td>1000 requests</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Network In/Out</strong></td>
+                            <td>Network-intensive apps</td>
+                            <td>10 MB/s</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Auto Scaling Best Practices -->
+            <section>
+                <h2>Auto Scaling Best Practices</h2>
+                
+                <div class="best-practices">
+                    <h3>Configuration Guidelines</h3>
+                    <ul>
+                        <li><strong>Health Checks:</strong> Use both EC2 and ELB health checks</li>
+                        <li><strong>Cooldown Periods:</strong> Prevent rapid scaling oscillations</li>
+                        <li><strong>Multiple AZs:</strong> Distribute instances for high availability</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Cooldown and Warmup -->
+            <section>
+                <h2>Cooldown and Warmup Periods</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>Timing Controls</h3>
+                    <p>Scale Event → Cooldown → Next Scale Event</p>
+                </div>
+
+                <h3>Period Purposes</h3>
+                <ul>
+                    <li><strong>Cooldown:</strong> Wait time after scaling activity (300 seconds default)</li>
+                    <li><strong>Warmup:</strong> Time for instance to contribute to metrics</li>
+                </ul>
+            </section>
+
+            <!-- Lab 9 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🔬 Lab 9: Auto Scaling Implementation</h2>
+                    <p>Duration: 45 minutes</p>
+                    <h3>Objectives:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Create launch templates with user data scripts</li>
+                        <li>Configure Auto Scaling group with scaling policies</li>
+                        <li>Test automatic scaling based on CPU metrics</li>
+                        <li>Monitor scaling events and cost implications</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- CloudWatch Introduction -->
+            <section>
+                <h2>Amazon CloudWatch Overview</h2>
+                
+                <div class="key-points">
+                    <h3>CloudWatch Services</h3>
+                    <ul>
+                        <li><strong>Metrics:</strong> Performance data from AWS services</li>
+                        <li><strong>Logs:</strong> Centralized log management</li>
+                        <li><strong>Events:</strong> System events and automated responses</li>
+                        <li><strong>Alarms:</strong> Notifications and automatic actions</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- CloudWatch Metrics -->
+            <section>
+                <h2>CloudWatch Metrics</h2>
+                
+                <h3>Metric Characteristics</h3>
+                <ul>
+                    <li><strong>Variables to Monitor:</strong> CPU, NetworkIn, DiskReadOps</li>
+                    <li><strong>Namespaces:</strong> Logical grouping (AWS/EC2, AWS/RDS)</li>
+                    <li><strong>Dimensions:</strong> Metric attributes (InstanceId, DBName)</li>
+                    <li><strong>Timestamps:</strong> Data points with time stamps</li>
+                </ul>
+            </section>
+
+            <!-- CloudWatch Integration -->
+            <section>
+                <h2>CloudWatch Service Integration</h2>
+                
+                <div class="highlight-box">
+                    <h3>Native Integration</h3>
+                    <p>CloudWatch integrates with <strong>70+ AWS services</strong> including EC2, DynamoDB, S3, Lambda, API Gateway</p>
+                </div>
+
+                <h3>Monitoring Types</h3>
+                <ul>
+                    <li><strong>Basic Monitoring:</strong> 5-minute intervals (free)</li>
+                    <li><strong>Detailed Monitoring:</strong> 1-minute intervals (additional cost)</li>
+                </ul>
+            </section>
+
+            <!-- Custom Metrics -->
+            <section>
+                <h2>Custom CloudWatch Metrics</h2>
+                
+                <div class="key-points">
+                    <h3>Creating Custom Metrics</h3>
+                    <ul>
+                        <li><strong>Applications:</strong> Send metrics using AWS SDK</li>
+                        <li><strong>Custom Namespaces:</strong> Create your own metric categories</li>
+                        <li><strong>High Resolution:</strong> Up to 1-second intervals</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- CloudWatch Dashboards -->
+            <section>
+                <h2>CloudWatch Dashboards</h2>
+                
+                <h3>Dashboard Features</h3>
+                <ul>
+                    <li><strong>Global Visibility:</strong> Dashboards available across regions</li>
+                    <li><strong>Cross-Account:</strong> Include metrics from different accounts</li>
+                    <li><strong>Auto-Refresh:</strong> 10s, 1m, 2m, 5m, 15m intervals</li>
+                    <li><strong>Sharing:</strong> Public access without AWS credentials</li>
+                </ul>
+            </section>
+
+            <!-- CloudWatch Alarms -->
+            <section>
+                <h2>CloudWatch Alarms</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>Alarm Architecture</h3>
+                    <p>Metric → Threshold → Alarm State → Action</p>
+                </div>
+
+                <h3>Alarm States</h3>
+                <ul>
+                    <li><strong>OK:</strong> Metric is within threshold</li>
+                    <li><strong>ALARM:</strong> Metric breached threshold</li>
+                </ul>
+            </section>
+
+            <!-- Alarm Actions -->
+            <section>
+                <h2>CloudWatch Alarm Actions</h2>
+                
+                <h3>Available Actions</h3>
+                <ul>
+                    <li><strong>Auto Scaling:</strong> Add or remove EC2 instances</li>
+                    <li><strong>EC2 Actions:</strong> Stop, terminate, reboot instances</li>
+                    <li><strong>SNS Notifications:</strong> Send alerts via email/SMS</li>
+                    <li><strong>Systems Manager:</strong> Execute automation documents</li>
+                </ul>
+            </section>
+
+            <!-- CloudWatch Logs -->
+            <section>
+                <h2>CloudWatch Logs</h2>
+                
+                <div class="key-points">
+                    <h3>Log Sources</h3>
+                    <ul>
+                        <li><strong>Elastic Beanstalk:</strong> Application logs</li>
+                        <li><strong>ECS:</strong> Container logs</li>
+                        <li><strong>Lambda:</strong> Function execution logs</li>
+                        <li><strong>VPC Flow Logs:</strong> Network traffic logs</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- CloudWatch Logs Features -->
+            <section>
+                <h2>CloudWatch Logs Features</h2>
+                
+                <h3>Log Management</h3>
+                <ul>
+                    <li><strong>Log Groups:</strong> Logical grouping of log streams</li>
+                    <li><strong>Log Streams:</strong> Sequence of log events</li>
+                    <li><strong>Retention Policies:</strong> Control log storage duration</li>
+                    <li><strong>Metric Filters:</strong> Extract metrics from log data</li>
+                </ul>
+            </section>
+
+            <!-- CloudWatch Events -->
+            <section>
+                <h2>CloudWatch Events (EventBridge)</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>Event-Driven Architecture</h3>
+                    <p>Event Source → Event Rule → Target Action</p>
+                </div>
+
+                <h3>Event Types</h3>
+                <ul>
+                    <li><strong>AWS Service Events:</strong> EC2 state changes, S3 uploads</li>
+                    <li><strong>Scheduled Events:</strong> Cron or rate expressions</li>
+                </ul>
+            </section>
+
+            <!-- CloudWatch Events Targets -->
+            <section>
+                <h2>CloudWatch Events Targets</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Targets</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Compute</strong></td>
+                            <td>Lambda, Batch, ECS</td>
+                            <td>Execute code/tasks</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Integration</strong></td>
+                            <td>SQS, SNS, Kinesis</td>
+                            <td>Message passing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Orchestration</strong></td>
+                            <td>Step Functions, CodePipeline</td>
+                            <td>Workflow automation</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Lab 10 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🔬 Lab 10: CloudWatch Monitoring & Alerts</h2>
+                    <p>Duration: 45 minutes</p>
+                    <h3>Objectives:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Set up comprehensive CloudWatch monitoring</li>
+                        <li>Create custom metrics and dashboard</li>
+                        <li>Configure alarms and SNS notifications</li>
+                        <li>Analyze logs and performance trends</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Serverless Introduction -->
+            <section>
+                <h2>Serverless Computing with AWS Lambda</h2>
+                
+                <div class="key-points">
+                    <h3>Serverless Benefits</h3>
+                    <ul>
+                        <li><strong>No Server Management:</strong> AWS handles infrastructure</li>
+                        <li><strong>Automatic Scaling:</strong> Scales with demand automatically</li>
+                        <li><strong>Pay-per-Execution:</strong> Only pay for compute time used</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Lambda Fundamentals -->
+            <section>
+                <h2>AWS Lambda Fundamentals</h2>
+                
+                <h3>Function Characteristics</h3>
+                <ul>
+                    <li><strong>Runtime Support:</strong> Python, Node.js, Java, .NET, Go, Ruby</li>
+                    <li><strong>Execution Time:</strong> Maximum 15 minutes per invocation</li>
+                    <li><strong>Memory:</strong> 128 MB to 10,240 MB</li>
+                    <li><strong>Concurrent Executions:</strong> Up to 1,000 by default</li>
+                </ul>
+            </section>
+
+            <!-- Lambda Event Sources -->
+            <section>
+                <h2>Lambda Event Sources</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Services</th>
+                            <th>Trigger Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Storage</strong></td>
+                            <td>S3, DynamoDB</td>
+                            <td>Object/Item changes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>API</strong></td>
+                            <td>API Gateway, ALB</td>
+                            <td>HTTP requests</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Streaming</strong></td>
+                            <td>Kinesis, SQS</td>
+                            <td>Message/record processing</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- API Gateway Introduction -->
+            <section>
+                <h2>Amazon API Gateway</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>API Gateway Role</h3>
+                    <p>Client → API Gateway → Lambda → Backend Services</p>
+                </div>
+
+                <h3>Core Features</h3>
+                <ul>
+                    <li><strong>REST APIs:</strong> RESTful API development</li>
+                    <li><strong>HTTP APIs:</strong> Low-latency, cost-effective APIs</li>
+                </ul>
+            </section>
+
+            <!-- API Gateway Features -->
+            <section>
+                <h2>API Gateway Advanced Features</h2>
+                
+                <div class="best-practices">
+                    <h3>Enterprise Features</h3>
+                    <ul>
+                        <li><strong>Authentication:</strong> IAM, Cognito, Lambda authorizers</li>
+                        <li><strong>Rate Limiting:</strong> Throttling and usage plans</li>
+                        <li><strong>Caching:</strong> Response caching for performance</li>
+                        <li><strong>Monitoring:</strong> CloudWatch integration</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Lambda + API Gateway Integration -->
+            <section>
+                <h2>Lambda + API Gateway Integration</h2>
+                
+                <h3>Integration Types</h3>
+                <ul>
+                    <li><strong>Lambda Proxy:</strong> Simple request/response mapping</li>
+                    <li><strong>Lambda Custom:</strong> Transform requests and responses</li>
+                    <li><strong>HTTP Proxy:</strong> Pass through to HTTP endpoints</li>
+                    <li><strong>AWS Service:</strong> Direct AWS service integration</li>
+                </ul>
+            </section>
+
+            <!-- Serverless Architecture Patterns -->
+            <section>
+                <h2>Serverless Architecture Patterns</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>Common Pattern</h3>
+                    <p>API Gateway → Lambda → DynamoDB/RDS</p>
+                </div>
+
+                <h3>Use Cases</h3>
+                <ul>
+                    <li><strong>Web APIs:</strong> RESTful backend services</li>
+                    <li><strong>Data Processing:</strong> ETL and transformation</li>
+                </ul>
+            </section>
+
+            <!-- Serverless Benefits and Considerations -->
+            <section>
+                <h2>Serverless Benefits & Considerations</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Benefits</th>
+                            <th>Considerations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>No server management</td>
+                            <td>Cold start latency</td>
+                        </tr>
+                        <tr>
+                            <td>Automatic scaling</td>
+                            <td>Execution time limits</td>
+                        </tr>
+                        <tr>
+                            <td>Pay-per-use</td>
+                            <td>Limited runtime options</td>
+                        </tr>
+                        <tr>
+                            <td>High availability</td>
+                            <td>Vendor lock-in</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- DynamoDB for Serverless -->
+            <section>
+                <h2>DynamoDB for Serverless Applications</h2>
+                
+                <div class="key-points">
+                    <h3>Perfect Serverless Database</h3>
+                    <ul>
+                        <li><strong>Fully Managed:</strong> No server management required</li>
+                        <li><strong>Single-Digit Latency:</strong> Consistent performance at scale</li>
+                        <li><strong>Auto Scaling:</strong> Scales automatically with demand</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Lab 11 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🔬 Lab 11: Lambda Functions & API Gateway</h2>
+                    <p>Duration: 45 minutes</p>
+                    <h3>Objectives:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Create Lambda function for data processing</li>
+                        <li>Configure API Gateway with REST endpoints</li>
+                        <li>Implement DynamoDB integration for data persistence</li>
+                        <li>Test complete serverless API workflow</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Infrastructure as Code Introduction -->
+            <section>
+                <h2>Infrastructure as Code (IaC)</h2>
+                
+                <div class="key-points">
+                    <h3>IaC Principles</h3>
+                    <ul>
+                        <li><strong>Declarative:</strong> Define desired end state, not steps</li>
+                        <li><strong>Version Control:</strong> Track infrastructure changes</li>
+                        <li><strong>Repeatable:</strong> Consistent deployments across environments</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- IaC Benefits -->
+            <section>
+                <h2>Infrastructure as Code Benefits</h2>
+                
+                <div class="best-practices">
+                    <h3>Key Advantages</h3>
+                    <ul>
+                        <li><strong>Consistency:</strong> Eliminate configuration drift</li>
+                        <li><strong>Speed:</strong> Rapid environment provisioning</li>
+                        <li><strong>Documentation:</strong> Infrastructure as living documentation</li>
+                        <li><strong>Testing:</strong> Test infrastructure changes safely</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Terraform vs CloudFormation -->
+            <section>
+                <h2>Terraform vs CloudFormation</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Terraform</th>
+                            <th>CloudFormation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Cloud Support</strong></td>
+                            <td>Multi-cloud</td>
+                            <td>AWS only</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Language</strong></td>
+                            <td>HCL (HashiCorp)</td>
+                            <td>JSON/YAML</td>
+                        </tr>
+                        <tr>
+                            <td><strong>State Management</strong></td>
+                            <td>State file</td>
+                            <td>AWS managed</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Terraform Fundamentals -->
+            <section>
+                <h2>Terraform Fundamentals</h2>
+                
+                <h3>Core Concepts</h3>
+                <ul>
+                    <li><strong>Providers:</strong> Plugin that interfaces with APIs (AWS, Azure)</li>
+                    <li><strong>Resources:</strong> Infrastructure components (EC2, S3)</li>
+                    <li><strong>Data Sources:</strong> Read existing infrastructure</li>
+                    <li><strong>Modules:</strong> Reusable configuration packages</li>
+                </ul>
+            </section>
+
+            <!-- Terraform Workflow -->
+            <section>
+                <h2>Terraform Workflow</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>Standard Workflow</h3>
+                    <p>terraform init → terraform plan → terraform apply</p>
+                </div>
+
+                <h3>Workflow Steps</h3>
+                <ul>
+                    <li><strong>init:</strong> Initialize working directory</li>
+                    <li><strong>plan:</strong> Preview changes</li>
+                </ul>
+            </section>
+
+            <!-- Terraform Commands -->
+            <section>
+                <h2>Essential Terraform Commands</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Purpose</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>terraform init</strong></td>
+                            <td>Initialize directory</td>
+                            <td>First run, new providers</td>
+                        </tr>
+                        <tr>
+                            <td><strong>terraform plan</strong></td>
+                            <td>Preview changes</td>
+                            <td>Before applying changes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>terraform apply</strong></td>
+                            <td>Apply changes</td>
+                            <td>Create/update resources</td>
+                        </tr>
+                        <tr>
+                            <td><strong>terraform destroy</strong></td>
+                            <td>Destroy resources</td>
+                            <td>Clean up environment</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Terraform State -->
+            <section>
+                <h2>Terraform State Management</h2>
+                
+                <div class="key-points">
+                    <h3>State File Purpose</h3>
+                    <ul>
+                        <li><strong>Resource Tracking:</strong> Maps configuration to real resources</li>
+                        <li><strong>Performance:</strong> Caches resource attributes</li>
+                        <li><strong>Collaboration:</strong> Shared state for team environments</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Terraform Best Practices -->
+            <section>
+                <h2>Terraform Best Practices</h2>
+                
+                <div class="best-practices">
+                    <h3>Configuration Guidelines</h3>
+                    <ul>
+                        <li><strong>Remote State:</strong> Store state in S3 with locking</li>
+                        <li><strong>Modules:</strong> Use modules for reusable components</li>
+                        <li><strong>Variables:</strong> Parameterize configurations</li>
+                        <li><strong>Version Control:</strong> Track all configuration files</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Terraform Variables and Outputs -->
+            <section>
+                <h2>Terraform Variables and Outputs</h2>
+                
+                <h3>Variables</h3>
+                <ul>
+                    <li><strong>Input Variables:</strong> Parameterize configuration</li>
+                    <li><strong>Local Values:</strong> Computed values within configuration</li>
+                    <li><strong>Environment Variables:</strong> Set via TF_VAR_name</li>
+                </ul>
+
+                <h3>Outputs</h3>
+                <ul>
+                    <li><strong>Return Values:</strong> Export important resource attributes</li>
+                </ul>
+            </section>
+
+            <!-- Lab 12 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🔬 Lab 12: Infrastructure as Code with Terraform</h2>
+                    <p>Duration: 45 minutes</p>
+                    <h3>Objectives:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Install and configure Terraform</li>
+                        <li>Create basic AWS resources using Terraform code</li>
+                        <li>Use variables and outputs for reusable infrastructure</li>
+                        <li>Compare Terraform vs CloudFormation approaches</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- DevOps Integration -->
+            <section>
+                <h2>DevOps and CI/CD Integration</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>Modern DevOps Pipeline</h3>
+                    <p>Code → Build → Test → Deploy → Monitor</p>
+                </div>
+
+                <h3>Pipeline Integration</h3>
+                <ul>
+                    <li><strong>Version Control:</strong> Git-based infrastructure</li>
+                    <li><strong>Automated Testing:</strong> Infrastructure validation</li>
+                </ul>
+            </section>
+
+            <!-- CI/CD Best Practices -->
+            <section>
+                <h2>CI/CD with Infrastructure as Code</h2>
+                
+                <div class="best-practices">
+                    <h3>Pipeline Best Practices</h3>
+                    <ul>
+                        <li><strong>Environment Promotion:</strong> Dev → Staging → Production</li>
+                        <li><strong>Automated Testing:</strong> Validate before deployment</li>
+                        <li><strong>Rollback Strategy:</strong> Quick recovery from failures</li>
+                        <li><strong>Security Scanning:</strong> Scan for vulnerabilities</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Monitoring Production Systems -->
+            <section>
+                <h2>Production Monitoring Strategy</h2>
+                
+                <h3>Observability Pillars</h3>
+                <ul>
+                    <li><strong>Metrics:</strong> Quantitative performance data</li>
+                    <li><strong>Logs:</strong> Detailed event information</li>
+                    <li><strong>Traces:</strong> Request flow through system</li>
+                    <li><strong>Alerts:</strong> Proactive issue notification</li>
+                </ul>
+            </section>
+
+            <!-- Cost Optimization Advanced -->
+            <section>
+                <h2>Advanced Cost Optimization</h2>
+                
+                <div class="key-points">
+                    <h3>Cost Management Strategies</h3>
+                    <ul>
+                        <li><strong>Auto Scaling:</strong> Dynamic capacity management</li>
+                        <li><strong>Serverless:</strong> Pay-per-execution model</li>
+                        <li><strong>Reserved Instances:</strong> Commit for discounts</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Cost Optimization Continued -->
+            <section>
+                <h2>Cost Optimization Tools</h2>
+                
+                <h3>AWS Cost Management</h3>
+                <ul>
+                    <li><strong>Cost Explorer:</strong> Analyze spending patterns</li>
+                    <li><strong>Budgets:</strong> Set spending alerts</li>
+                    <li><strong>Trusted Advisor:</strong> Cost optimization recommendations</li>
+                    <li><strong>Compute Optimizer:</strong> Right-sizing recommendations</li>
+                </ul>
+            </section>
+
+            <!-- Security in Advanced Architectures -->
+            <section>
+                <h2>Security in Modern Architectures</h2>
+                
+                <div class="best-practices">
+                    <h3>Security Principles</h3>
+                    <ul>
+                        <li><strong>Defense in Depth:</strong> Multiple security layers</li>
+                        <li><strong>Principle of Least Privilege:</strong> Minimal required access</li>
+                        <li><strong>Zero Trust:</strong> Never trust, always verify</li>
+                        <li><strong>Encryption Everywhere:</strong> Data protection at rest and transit</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Compliance and Governance -->
+            <section>
+                <h2>Compliance and Governance</h2>
+                
+                <h3>Governance Tools</h3>
+                <ul>
+                    <li><strong>AWS Config:</strong> Resource compliance monitoring</li>
+                    <li><strong>CloudTrail:</strong> API call auditing</li>
+                    <li><strong>AWS Organizations:</strong> Multi-account management</li>
+                    <li><strong>Service Control Policies:</strong> Centralized access control</li>
+                </ul>
+            </section>
+
+            <!-- Disaster Recovery -->
+            <section>
+                <h2>Disaster Recovery Strategies</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Strategy</th>
+                            <th>RTO</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Backup & Restore</strong></td>
+                            <td>Hours</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pilot Light</strong></td>
+                            <td>10s of minutes</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Warm Standby</strong></td>
+                            <td>Minutes</td>
+                            <td>Medium-High</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multi-Site Active</strong></td>
+                            <td>Real-time</td>
+                            <td>High</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Performance Optimization -->
+            <section>
+                <h2>Performance Optimization</h2>
+                
+                <div class="key-points">
+                    <h3>Performance Strategies</h3>
+                    <ul>
+                        <li><strong>Caching:</strong> ElastiCache, CloudFront</li>
+                        <li><strong>Database Optimization:</strong> Read replicas, connection pooling</li>
+                        <li><strong>Content Delivery:</strong> CDN and edge locations</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Architecture Review -->
+            <section>
+                <h2>Complete Architecture Review</h2>
+                
+                <div class="architecture-diagram">
+                    <h3>Production-Ready Architecture</h3>
+                    <p>Route53 → ALB → Auto Scaling → RDS Multi-AZ → S3/CloudFront</p>
+                </div>
+
+                <h3>Architecture Components</h3>
+                <ul>
+                    <li><strong>DNS:</strong> Route53 for traffic routing</li>
+                    <li><strong>Load Balancing:</strong> ALB for request distribution</li>
+                </ul>
+            </section>
+
+            <!-- Architecture Components -->
+            <section>
+                <h2>Architecture Components - Complete</h2>
+                
+                <h3>Production Components</h3>
+                <ul>
+                    <li><strong>Compute:</strong> Auto Scaling EC2 instances</li>
+                    <li><strong>Database:</strong> RDS Multi-AZ with read replicas</li>
+                    <li><strong>Storage:</strong> S3 with CloudFront distribution</li>
+                    <li><strong>Monitoring:</strong> CloudWatch comprehensive monitoring</li>
+                    <li><strong>Security:</strong> IAM, Security Groups, NACLs</li>
+                </ul>
+            </section>
+
+            <!-- Key Takeaways -->
+            <section>
+                <h2>Content 3 Key Takeaways</h2>
+                
+                <div class="key-points">
+                    <h3>Advanced Concepts Mastered</h3>
+                    <ul>
+                        <li><strong>Auto Scaling:</strong> Dynamic infrastructure and cost optimization</li>
+                        <li><strong>CloudWatch:</strong> Comprehensive monitoring and alerting</li>
+                        <li><strong>Serverless:</strong> Lambda, API Gateway, event-driven architecture</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Course Completion -->
+            <section>
+                <h2>Course Completion & Next Steps</h2>
+                
+                <div class="highlight-box">
+                    <h3>What You've Accomplished</h3>
+                    <ul>
+                        <li>Built complete end-to-end AWS architectures</li>
+                        <li>Implemented production-ready solutions</li>
+                        <li>Mastered 12 comprehensive hands-on labs</li>
+                        <li>Applied Well-Architected Framework principles</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Certification Path -->
+            <section>
+                <h2>AWS Certification Path</h2>
+                
+                <div class="best-practices">
+                    <h3>Recommended Certifications</h3>
+                    <ul>
+                        <li><strong>Solutions Architect Associate:</strong> Foundation-level architecture</li>
+                        <li><strong>Solutions Architect Professional:</strong> Advanced architecture</li>
+                        <li><strong>DevOps Engineer Professional:</strong> Automation and operations</li>
+                        <li><strong>Security Specialty:</strong> Security-focused expertise</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Continued Learning -->
+            <section>
+                <h2>Continued Learning Resources</h2>
+                
+                <h3>Learning Paths</h3>
+                <ul>
+                    <li><strong>AWS Documentation:</strong> Official technical documentation</li>
+                    <li><strong>AWS Training:</strong> Official training courses</li>
+                    <li><strong>AWS Workshops:</strong> Hands-on guided tutorials</li>
+                    <li><strong>AWS Whitepapers:</strong> Best practices and architecture guides</li>
+                </ul>
+            </section>
+
+            <!-- Q&A Slide -->
+            <section class="title-slide">
+                <h1>Questions & Discussion</h1>
+                <h2>Production-Ready AWS Mastery</h2>
+                <div class="key-points">
+                    <h3>Congratulations!</h3>
+                    <ul>
+                        <li>You've completed a comprehensive AWS architecting course</li>
+                        <li>Applied modern cloud architecture patterns</li>
+                        <li>Built production-ready, scalable solutions</li>
+                        <li>Ready to tackle real-world AWS projects</li>
+                    </ul>
+                </div>
+            </section>
+
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            width: 1200,
+            height: 800,
+            margin: 0.1,
+            minScale: 0.2,
+            maxScale: 1.5
+        });
+    </script>
+</body>
+</html>
