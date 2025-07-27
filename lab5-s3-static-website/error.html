@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - USERNAME's AWS Static Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🌐 USERNAME's AWS Static Website</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="error-content">
+            <div class="error-message">
+                <h1>🔍 404 - Page Not Found</h1>
+                <h2>Oops! The page you're looking for doesn't exist.</h2>
+                
+                <div class="error-details">
+                    <p>Don't worry, this error page is working correctly! This demonstrates how S3 static website hosting handles error pages.</p>
+                    
+                    <div class="error-info">
+                        <h3>What happened?</h3>
+                        <ul>
+                            <li>The requested URL was not found on this website</li>
+                            <li>You may have mistyped the URL</li>
+                            <li>The page may have been moved or deleted</li>
+                            <li>This could be a broken link</li>
+                        </ul>
+                    </div>
+
+                    <div class="error-actions">
+                        <h3>What can you do?</h3>
+                        <ul>
+                            <li><a href="index.html">🏠 Go back to the homepage</a></li>
+                            <li><a href="about.html">📖 Learn about this lab</a></li>
+                            <li>Check the URL for typos</li>
+                            <li>Use the navigation menu above</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="technical-info">
+                    <h3>🔧 Technical Details</h3>
+                    <p>This error page is served by:</p>
+                    <ul>
+                        <li><strong>Amazon S3:</strong> Custom error document configuration</li>
+                        <li><strong>CloudFront:</strong> Custom error response handling</li>
+                        <li><strong>HTTP Status:</strong> 404 Not Found</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 USERNAME - AWS Architecting Course Lab 5</p>
+            <p>Powered by Amazon S3 and CloudFront</p>
+        </div>
+    </footer>
+</body>
+</html>

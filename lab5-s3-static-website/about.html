@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - USERNAME's AWS Static Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🌐 USERNAME's AWS Static Website</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="about-content">
+            <h2>About This Lab</h2>
+            
+            <div class="about-section">
+                <h3>🎯 Purpose</h3>
+                <p>This static website demonstrates the implementation of AWS S3 static website hosting with CloudFront content delivery network. It serves as a practical example of modern web hosting architecture using cloud services.</p>
+            </div>
+
+            <div class="about-section">
+                <h3>🏗️ Architecture</h3>
+                <div class="architecture-details">
+                    <h4>Components:</h4>
+                    <ul>
+                        <li><strong>Amazon S3:</strong> Object storage service hosting website files</li>
+                        <li><strong>CloudFront:</strong> Content delivery network for global distribution</li>
+                        <li><strong>IAM Policies:</strong> Access control for public website access</li>
+                    </ul>
+                    
+                    <h4>Benefits:</h4>
+                    <ul>
+                        <li>High availability and durability (99.999999999%)</li>
+                        <li>Global content delivery with low latency</li>
+                        <li>Automatic scaling based on demand</li>
+                        <li>Cost-effective pay-as-you-go pricing</li>
+                        <li>Built-in security features</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="about-section">
+                <h3>🔧 Technical Implementation</h3>
+                <div class="tech-details">
+                    <h4>S3 Configuration:</h4>
+                    <ul>
+                        <li>Bucket: USERNAME-static-website-hosting</li>
+                        <li>Region: us-east-1 (N. Virginia)</li>
+                        <li>Index Document: index.html</li>
+                        <li>Error Document: error.html</li>
+                    </ul>
+                    
+                    <h4>CloudFront Settings:</h4>
+                    <ul>
+                        <li>Origin: S3 bucket website endpoint</li>
+                        <li>Protocol: HTTPS redirect enabled</li>
+                        <li>Caching: Optimized for static content</li>
+                        <li>Compression: Enabled for better performance</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="about-section">
+                <h3>📊 Performance Metrics</h3>
+                <p>CloudFront provides significant performance improvements:</p>
+                <ul>
+                    <li>Reduced latency through edge locations</li>
+                    <li>Improved Time to First Byte (TTFB)</li>
+                    <li>Bandwidth optimization through compression</li>
+                    <li>Reduced load on origin S3 bucket</li>
+                </ul>
+            </div>
+
+            <div class="student-info">
+                <h3>👨‍🎓 Student Information</h3>
+                <p><strong>Name:</strong> USERNAME</p>
+                <p><strong>Lab:</strong> Lab 5 - S3 Static Website Hosting</p>
+                <p><strong>Course:</strong> AWS Architecting on Cloud</p>
+                <p><strong>Date:</strong> <span id="current-date"></span></p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 USERNAME - AWS Architecting Course Lab 5</p>
+            <p>Powered by Amazon S3 and CloudFront</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString();
+    </script>
+</body>
+</html>
