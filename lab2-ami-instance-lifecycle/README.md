@@ -51,23 +51,24 @@ After completing this lab, you will be able to:
 #!/bin/bash
 # Advanced user data script for EC2 lifecycle testing
 
-yum update -y
-yum install -y httpd git htop curl -y
+# Update system and install packages
+sudo yum update -y
+sudo yum install -y httpd git htop curl mod_cgi
 
-# Enable CGI module in Apache
-yum install -y mod_cgi
-sed -i 's/^#\(AddHandler cgi-script .cgi\)/\1/' /etc/httpd/conf/httpd.conf
-sed -i '/<Directory "\/var\/www\/cgi-bin">/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/httpd/conf/httpd.conf
-sed -i '/<Directory "\/var\/www\/cgi-bin">/,/<\/Directory>/ s/Options None/Options +ExecCGI/' /etc/httpd/conf/httpd.conf
+# Enable CGI in Apache config
+sudo sed -i 's/^#\(AddHandler cgi-script .cgi\)/\1/' /etc/httpd/conf/httpd.conf
+sudo sed -i '/<Directory "\/var\/www\/cgi-bin">/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/httpd/conf/httpd.conf
+sudo sed -i '/<Directory "\/var\/www\/cgi-bin">/,/<\/Directory>/ s/Options None/Options +ExecCGI/' /etc/httpd/conf/httpd.conf
 
-systemctl start httpd
-systemctl enable httpd
+# Start and enable Apache
+sudo systemctl start httpd
+sudo systemctl enable httpd
 
 # Create version file
-echo "Base Instance - $(date)" > /var/www/html/version.txt
+echo "Base Instance - $(date)" | sudo tee /var/www/html/version.txt > /dev/null
 
-# Create system info page
-cat > /var/www/html/sysinfo.html << 'HTML'
+# Create system info HTML page
+sudo tee /var/www/html/sysinfo.html > /dev/null << 'HTML'
 <!DOCTYPE html>
 <html>
 <head>
@@ -100,7 +101,7 @@ cat > /var/www/html/sysinfo.html << 'HTML'
 HTML
 
 # Create CGI metadata script
-cat > /var/www/cgi-bin/instance-metadata.sh << 'SCRIPT'
+sudo tee /var/www/cgi-bin/instance-metadata.sh > /dev/null << 'SCRIPT'
 #!/bin/bash
 echo "Content-Type: text/html"
 echo ""
@@ -113,12 +114,13 @@ echo "Availability Zone: $(curl -s http://169.254.169.254/latest/meta-data/place
 echo "</pre></body></html>"
 SCRIPT
 
-chmod +x /var/www/cgi-bin/instance-metadata.sh
+# Make CGI script executable
+sudo chmod +x /var/www/cgi-bin/instance-metadata.sh
+
+# Log script completion
+echo "User data script completed at $(date)" | sudo tee -a /var/log/userdata.log
+
 ```
-
-# Log completion
-echo "User data script completed at $(date)" >> /var/log/userdata.log
-
 
 5. **Launch the Instance:**
    - Review all settings
