@@ -47,6 +47,7 @@ After completing this lab, you will be able to:
      - HTTPS (443) from 0.0.0.0/0
 
 4. **User Data Script:**
+bash```
 #!/bin/bash
 # Advanced user data script for EC2 lifecycle testing
 
@@ -113,6 +114,7 @@ echo "</pre></body></html>"
 SCRIPT
 
 chmod +x /var/www/cgi-bin/instance-metadata.sh
+```
 
 # Log completion
 echo "User data script completed at $(date)" >> /var/log/userdata.log
