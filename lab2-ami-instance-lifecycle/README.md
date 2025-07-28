@@ -47,7 +47,7 @@ After completing this lab, you will be able to:
      - HTTPS (443) from 0.0.0.0/0
 
 4. **User Data Script:**
-bash```
+```bash
 #!/bin/bash
 # Advanced user data script for EC2 lifecycle testing
 
