@@ -195,10 +195,7 @@ echo "User data script completed at $(date)" >> /var/log/userdata.log
    </body>
    </html>
 HTML
-   
-   # Clear bash history for clean AMI
-   history -c
-   ```
+```
 
 2. **Create AMI v1.0:**
    - In EC2 Console, select your instance
