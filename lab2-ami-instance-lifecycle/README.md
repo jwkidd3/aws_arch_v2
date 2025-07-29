@@ -47,70 +47,72 @@ After completing this lab, you will be able to:
      - HTTPS (443) from 0.0.0.0/0
 
 4. **User Data Script:**
-   ```bash
-   #!/bin/bash
-   # Advanced user data script for lifecycle testing
-   yum update -y
-   yum install -y httpd git htop
-   systemctl start httpd
-   systemctl enable httpd
-   
-   # Create version file
-   echo "Base Instance - $(date)" > /var/www/html/version.txt
-   
-   # Create system info page
-   cat > /var/www/html/sysinfo.html << 'HTML'
-   <!DOCTYPE html>
-   <html>
-   <head>
-       <title>System Information - USERNAME Instance</title>
-       <style>
-           body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
-           .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-           .info-box { background: #e8f4fd; padding: 15px; margin: 10px 0; border-radius: 5px; }
-           .command { background: #f8f8f8; padding: 10px; font-family: monospace; border-radius: 3px; }
-       </style>
-   </head>
-   <body>
-       <div class="container">
-           <h1>🖥️ System Information</h1>
-           <div class="info-box">
-               <h3>Instance Details:</h3>
-               <p><strong>Owner:</strong> USERNAME</p>
-               <p><strong>Purpose:</strong> AMI Creation & Lifecycle Testing</p>
-               <p><strong>Created:</strong> $(date)</p>
-           </div>
-           <div class="info-box">
-               <h3>Available Endpoints:</h3>
-               <ul>
-                   <li><a href="/version.txt">Version Information</a></li>
-                   <li><a href="/instance-metadata">Instance Metadata</a></li>
-               </ul>
-           </div>
-       </div>
-   </body>
-   </html>
+```bash
+#!/bin/bash
+set -euxo pipefail
+
+# Update and install Apache only (no curl install)
+yum update -y
+yum install -y httpd
+
+# Enable CGI support in Apache
+sed -i 's/^#\(AddHandler cgi-script .cgi\)/\1/' /etc/httpd/conf/httpd.conf
+sed -i '/<Directory "\/var\/www\/cgi-bin">/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/httpd/conf/httpd.conf
+sed -i '/<Directory "\/var\/www\/cgi-bin">/,/<\/Directory>/ s/Options None/Options +ExecCGI/' /etc/httpd/conf/httpd.conf
+
+# Start and enable Apache
+systemctl enable httpd
+systemctl start httpd
+
+# Create a version info file
+echo "Base Instance - $(date)" > /var/www/html/version.txt
+
+# Create a static HTML system info page
+cat > /var/www/html/sysinfo.html << 'HTML'
+<!DOCTYPE html>
+<html>
+<head>
+    <title>System Information - USERNAME Instance</title>
+</head>
+<body>
+    <h1>System Information</h1>
+    <ul>
+        <li><a href="/version.txt">Version Info</a></li>
+        <li><a href="/cgi-bin/instance-metadata.sh">Instance Metadata</a></li>
+    </ul>
+</body>
+</html>
 HTML
-   
-   # Create metadata endpoint
-   cat > /var/www/html/instance-metadata << 'SCRIPT'
-   #!/bin/bash
-   echo "Content-Type: text/html"
-   echo ""
-   echo "<html><body><h2>Instance Metadata</h2><pre>"
-   echo "Instance ID: $(curl -s http://169.254.169.254/latest/meta-data/instance-id)"
-   echo "Instance Type: $(curl -s http://169.254.169.254/latest/meta-data/instance-type)"
-   echo "Public IP: $(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)"
-   echo "Private IP: $(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)"
-   echo "Availability Zone: $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)"
-   echo "</pre></body></html>"
-SCRIPT
-   
-   chmod +x /var/www/html/instance-metadata
-   
-   # Log completion
-   echo "User data script completed at $(date)" >> /var/log/userdata.log
-   ```
+
+# Create IMDSv2-compatible CGI script for live instance metadata
+cat > /var/www/cgi-bin/instance-metadata.sh << 'EOF'
+#!/bin/bash
+echo "Content-Type: text/html"
+echo ""
+
+echo "<html><body><h2>Instance Metadata (IMDSv2)</h2><pre>"
+
+TOKEN=$(curl -sX PUT "http://169.254.169.254/latest/api/token" \
+  -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+
+echo "Instance ID: $(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id)"
+echo
+echo "Instance Type: $(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-type)"
+echo
+echo "Public IP: $(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-ipv4)"
+echo
+echo "Private IP: $(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/local-ipv4)"
+echo
+echo "Availability Zone: $(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/placement/availability-zone)"
+echo "</pre></body></html>"
+EOF
+
+# Ensure CGI script is executable
+chmod +x /var/www/cgi-bin/instance-metadata.sh
+
+# Log completion
+echo "User data script completed at $(date)" >> /var/log/userdata.log
+```
 
 5. **Launch the Instance:**
    - Review all settings
@@ -193,10 +195,7 @@ SCRIPT
    </body>
    </html>
 HTML
-   
-   # Clear bash history for clean AMI
-   history -c
-   ```
+```
 
 2. **Create AMI v1.0:**
    - In EC2 Console, select your instance
