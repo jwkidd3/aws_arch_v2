@@ -71,6 +71,7 @@ We'll build a highly available web application architecture:
    echo "<h1>API Tier</h1><p>Server: $(hostname)</p><p>Status: Active</p>" > /var/www/html/api/index.html
    echo "OK" > /var/www/html/health
    
+<<<<<<< HEAD
    # Create directories
    mkdir -p /var/www/html/app
    mkdir -p /var/www/html/api
@@ -78,6 +79,151 @@ We'll build a highly available web application architecture:
    # Set proper permissions
    chown -R apache:apache /var/www/html
    chmod -R 755 /var/www/html
+=======
+   # Create main application
+   cat > /var/www/html/index.html << 'HTML'
+   <!DOCTYPE html>
+   <html>
+   <head>
+       <title>Web Server 1 - USERNAME</title>
+       <style>
+           body { 
+               font-family: Arial, sans-serif; 
+               text-align: center; 
+               background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+               color: white; 
+               margin: 0; 
+               padding: 50px; 
+           }
+           .container {
+               background: rgba(255,255,255,0.1);
+               padding: 40px;
+               border-radius: 15px;
+               backdrop-filter: blur(10px);
+               display: inline-block;
+               min-width: 400px;
+           }
+           .server-info {
+               background: rgba(255,255,255,0.2);
+               padding: 20px;
+               border-radius: 10px;
+               margin: 20px 0;
+           }
+           .status { color: #00ff00; font-weight: bold; }
+           .nav { margin: 20px 0; }
+           .nav a { 
+               color: #ffeb3b; 
+               text-decoration: none; 
+               margin: 0 10px;
+               padding: 10px 20px;
+               background: rgba(255,255,255,0.2);
+               border-radius: 5px;
+           }
+       </style>
+   </head>
+   <body>
+       <div class="container">
+           <h1>🌐 Load Balanced Web Application</h1>
+           <h2>Server 1 - USERNAME</h2>
+           <div class="server-info">
+               <h3>Server Information</h3>
+               <p><strong>Instance ID:</strong> INSTANCE_ID_PLACEHOLDER</p>
+               <p><strong>Availability Zone:</strong> AZ_PLACEHOLDER</p>
+               <p><strong>Private IP:</strong> PRIVATE_IP_PLACEHOLDER</p>
+               <p class="status">🟢 Server Status: Active</p>
+           </div>
+           <div class="nav">
+               <a href="/">Home</a>
+               <a href="/app">Application</a>
+               <a href="/api">API</a>
+               <a href="/health">Health Check</a>
+           </div>
+           <p>Served by: <strong>Web Server 1</strong></p>
+       </div>
+   </body>
+   </html>
+   HTML
+   
+   # Replace placeholders with actual values
+   sed -i "s/INSTANCE_ID_PLACEHOLDER/$INSTANCE_ID/g" /var/www/html/index.html
+   sed -i "s/AZ_PLACEHOLDER/$AZ/g" /var/www/html/index.html
+   sed -i "s/PRIVATE_IP_PLACEHOLDER/$PRIVATE_IP/g" /var/www/html/index.html
+   sed -i "s/USERNAME/YOUR_USERNAME_HERE/g" /var/www/html/index.html
+   
+   # Create application endpoints
+   mkdir -p /var/www/html/app /var/www/html/api
+   
+   cat > /var/www/html/app/index.html << 'HTML'
+   <!DOCTYPE html>
+   <html>
+   <head>
+       <title>Application - Server 1</title>
+       <style>
+           body { font-family: Arial, sans-serif; text-align: center; background: #2c3e50; color: white; padding: 50px; }
+           .container { background: #34495e; padding: 30px; border-radius: 10px; display: inline-block; }
+       </style>
+   </head>
+   <body>
+       <div class="container">
+           <h1>📱 Application Server</h1>
+           <h2>Server 1 - USERNAME</h2>
+           <p>This is the application endpoint</p>
+           <p><strong>Path:</strong> /app</p>
+           <p><strong>Server:</strong> Web Server 1</p>
+           <a href="/" style="color: #3498db;">← Back to Home</a>
+       </div>
+   </body>
+   </html>
+HTML
+   
+   cat > /var/www/html/api/index.html << 'HTML'
+   <!DOCTYPE html>
+   <html>
+   <head>
+       <title>API - Server 1</title>
+       <style>
+           body { font-family: Arial, sans-serif; text-align: center; background: #27ae60; color: white; padding: 50px; }
+           .container { background: #2ecc71; padding: 30px; border-radius: 10px; display: inline-block; }
+       </style>
+   </head>
+   <body>
+       <div class="container">
+           <h1>🔧 API Server</h1>
+           <h2>Server 1 - USERNAME</h2>
+           <p>This is the API endpoint</p>
+           <p><strong>Path:</strong> /api</p>
+           <p><strong>Server:</strong> Web Server 1</p>
+           <a href="/" style="color: #ecf0f1;">← Back to Home</a>
+       </div>
+   </body>
+   </html>
+HTML
+   
+   # Create health check endpoint
+cat > /var/www/html/health/index.php << 'EOF'
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Health Check - Server 1</title>
+    <meta http-equiv="refresh" content="30">
+</head>
+<body>
+    <h1>Health Check - Server 1</h1>
+    <p>Status: <span style="color: green;">OK</span></p>
+    <p>Server: Web Server 1 - <?php echo get_current_user(); ?></p>
+    <p>Timestamp: <?php echo date('Y-m-d H:i:s T'); ?></p>
+    <p>Uptime: <?php echo shell_exec('uptime'); ?></p>
+    <p>Load Average: <?php 
+        $load = sys_getloadavg();
+        echo round($load[0], 2) . ', ' . round($load[1], 2) . ', ' . round($load[2], 2);
+    ?></p>
+</body>
+</html>
+EOF
+   
+   # Replace USERNAME in all files
+   find /var/www/html -name "*.html" -exec sed -i "s/USERNAME/YOUR_USERNAME_HERE/g" {} \;
+>>>>>>> 92264ff950e70caca819b48e49e8c73095d75557
    ```
 
 4. **Launch Second Web Server:**
