@@ -188,20 +188,26 @@ HTML
 HTML
    
    # Create health check endpoint
-   cat > /var/www/html/health/index.html << 'HTML'
-   <!DOCTYPE html>
-   <html>
-   <head>
-       <title>Health Check - Server 1</title>
-   </head>
-   <body>
-       <h1>Health Check - Server 1</h1>
-       <p>Status: OK</p>
-       <p>Server: Web Server 1 - USERNAME</p>
-       <p>Timestamp: $(date)</p>
-   </body>
-   </html>
-HTML
+cat > /var/www/html/health/index.php << 'EOF'
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Health Check - Server 1</title>
+    <meta http-equiv="refresh" content="30">
+</head>
+<body>
+    <h1>Health Check - Server 1</h1>
+    <p>Status: <span style="color: green;">OK</span></p>
+    <p>Server: Web Server 1 - <?php echo get_current_user(); ?></p>
+    <p>Timestamp: <?php echo date('Y-m-d H:i:s T'); ?></p>
+    <p>Uptime: <?php echo shell_exec('uptime'); ?></p>
+    <p>Load Average: <?php 
+        $load = sys_getloadavg();
+        echo round($load[0], 2) . ', ' . round($load[1], 2) . ', ' . round($load[2], 2);
+    ?></p>
+</body>
+</html>
+EOF
    
    # Replace USERNAME in all files
    find /var/www/html -name "*.html" -exec sed -i "s/USERNAME/YOUR_USERNAME_HERE/g" {} \;
