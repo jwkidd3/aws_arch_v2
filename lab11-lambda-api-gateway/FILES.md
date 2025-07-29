@@ -13,6 +13,9 @@ This directory contains all files needed for Lab 11: Lambda Functions & API Gate
 ## Lambda Functions Directory
 
 - **lambda-functions/create_task.py** - Template for create task Lambda function
+- **lambda-functions/get_tasks.py** - Template for get/list tasks Lambda function
+- **lambda-functions/update_task.py** - Template for update task Lambda function
+- **lambda-functions/delete_task.py** - Template for delete task Lambda function
 
 ## Lab Overview
 

@@ -51,11 +51,6 @@
 - [ ] Checked DynamoDB table for stored data
 - [ ] Tested with external tools (optional)
 
-### Advanced Exercise (Optional)
-- [ ] Created request validation model
-- [ ] Applied validation to API methods
-- [ ] Tested validation behavior
-
 ### Cleanup
 - [ ] Deleted API Gateway: `USERNAME-tasks-api`
 - [ ] Deleted all four Lambda functions

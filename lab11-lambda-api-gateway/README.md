@@ -43,125 +43,62 @@ You'll build a serverless task management API with the following components:
    - Click **Create table**
    - **Table name:** `USERNAME-tasks` ⚠️ **Replace USERNAME with your assigned username**
    - **Partition key:** `taskId` (String)
-   - Leave **Sort key** empty
-   - **Table settings:** Use default settings
+   - **Settings:** Use default settings
    - Click **Create table**
 
 3. **Verify Table Creation:**
-   - Wait for table status to show "Active"
+   - Wait for table status to become "Active"
    - Note the table ARN for later use
-
-### Step 2: Test Data (Optional)
-You can add sample data later through the Lambda functions we'll create.
 
 ---
 
-## Task 2: IAM Role for Lambda (10 minutes)
+## Task 2: IAM Role for Lambda (5 minutes)
 
 ### Step 1: Create Lambda Execution Role
 1. **Navigate to IAM:**
-   - Search for "IAM" in the AWS console
+   - In the AWS Management Console, search for "IAM"
    - Click **Roles** in the left navigation
 
 2. **Create Role:**
    - Click **Create role**
    - **Trusted entity type:** AWS service
-   - **Service:** Lambda
+   - **Use case:** Lambda
    - Click **Next**
 
-3. **Attach Policies:**
-   - Search and select: `AWSLambdaBasicExecutionRole`
-   - Search and select: `AmazonDynamoDBFullAccess`
+3. **Attach Permissions:**
+   - Search and select **AWSLambdaBasicExecutionRole**
+   - Search and select **AmazonDynamoDBFullAccess**
    - Click **Next**
 
 4. **Name and Create:**
    - **Role name:** `USERNAME-lambda-dynamodb-role` ⚠️ **Replace USERNAME with your assigned username**
-   - **Description:** `Role for Lambda to access DynamoDB and CloudWatch`
    - Click **Create role**
 
 ---
 
-## Task 3: Lambda Functions Creation (15 minutes)
+## Task 3: Lambda Functions Creation (20 minutes)
 
-### Step 1: Create Task Creation Function
+### Step 1: Create Task Function
 1. **Navigate to Lambda:**
-   - Search for "Lambda" in the AWS console
-   - Click **Create function**
+   - In the AWS Management Console, search for "Lambda"
+   - Click **Functions** in the left navigation
 
-2. **Function Configuration:**
-   - Choose **Author from scratch**
+2. **Create Function:**
+   - Click **Create function**
    - **Function name:** `USERNAME-create-task` ⚠️ **Replace USERNAME with your assigned username**
    - **Runtime:** Python 3.11
-   - **Architecture:** x86_64
-   - **Execution role:** Use existing role: `USERNAME-lambda-dynamodb-role`
+   - **Execution role:** Use an existing role
+   - **Existing role:** `USERNAME-lambda-dynamodb-role` ⚠️ **Use your username**
    - Click **Create function**
 
 3. **Function Code:**
-   ```python
-   import json
-   import boto3
-   import uuid
-   from datetime import datetime
-   from decimal import Decimal
+   Replace the default code with the create task function code from `lambda-functions/create_task.py`
 
-   # Initialize DynamoDB resource
-   dynamodb = boto3.resource('dynamodb')
-   table = dynamodb.Table('USERNAME-tasks')  # Replace USERNAME with your username
+4. **Environment Variables:**
+   - **Key:** `TABLE_NAME`
+   - **Value:** `USERNAME-tasks` ⚠️ **Replace USERNAME with your username**
 
-   def lambda_handler(event, context):
-       try:
-           # Parse request body
-           if 'body' in event:
-               body = json.loads(event['body'])
-           else:
-               body = event
-           
-           # Generate unique task ID
-           task_id = str(uuid.uuid4())
-           
-           # Create task item
-           task = {
-               'taskId': task_id,
-               'title': body.get('title', 'Untitled Task'),
-               'description': body.get('description', ''),
-               'status': body.get('status', 'pending'),
-               'priority': body.get('priority', 'medium'),
-               'createdAt': datetime.now().isoformat(),
-               'updatedAt': datetime.now().isoformat()
-           }
-           
-           # Save to DynamoDB
-           table.put_item(Item=task)
-           
-           return {
-               'statusCode': 201,
-               'headers': {
-                   'Content-Type': 'application/json',
-                   'Access-Control-Allow-Origin': '*'
-               },
-               'body': json.dumps({
-                   'message': 'Task created successfully',
-                   'taskId': task_id,
-                   'task': task
-               })
-           }
-           
-       except Exception as e:
-           print(f"Error: {str(e)}")
-           return {
-               'statusCode': 500,
-               'headers': {
-                   'Content-Type': 'application/json',
-                   'Access-Control-Allow-Origin': '*'
-               },
-               'body': json.dumps({
-                   'error': 'Internal server error',
-                   'message': str(e)
-               })
-           }
-   ```
-
-4. **Deploy and Test:**
+5. **Deploy and Test:**
    - Click **Deploy**
    - Click **Test** tab
    - **Event name:** `test-create-task`
@@ -183,83 +120,13 @@ You can add sample data later through the Lambda functions we'll create.
    - Use same runtime and role as previous function
 
 2. **Function Code:**
-   ```python
-   import json
-   import boto3
-   from boto3.dynamodb.conditions import Key
-   from decimal import Decimal
+   Use the get tasks function code from `lambda-functions/get_tasks.py`
 
-   # Initialize DynamoDB resource
-   dynamodb = boto3.resource('dynamodb')
-   table = dynamodb.Table('USERNAME-tasks')  # Replace USERNAME with your username
+3. **Environment Variables:**
+   - Add same TABLE_NAME variable
 
-   class DecimalEncoder(json.JSONEncoder):
-       def default(self, obj):
-           if isinstance(obj, Decimal):
-               return float(obj)
-           return super(DecimalEncoder, self).default(obj)
-
-   def lambda_handler(event, context):
-       try:
-           # Check if specific task ID is requested
-           if 'pathParameters' in event and event['pathParameters'] and 'taskId' in event['pathParameters']:
-               task_id = event['pathParameters']['taskId']
-               
-               # Get specific task
-               response = table.get_item(Key={'taskId': task_id})
-               
-               if 'Item' in response:
-                   return {
-                       'statusCode': 200,
-                       'headers': {
-                           'Content-Type': 'application/json',
-                           'Access-Control-Allow-Origin': '*'
-                       },
-                       'body': json.dumps(response['Item'], cls=DecimalEncoder)
-                   }
-               else:
-                   return {
-                       'statusCode': 404,
-                       'headers': {
-                           'Content-Type': 'application/json',
-                           'Access-Control-Allow-Origin': '*'
-                       },
-                       'body': json.dumps({'error': 'Task not found'})
-                   }
-           else:
-               # Get all tasks
-               response = table.scan()
-               
-               return {
-                   'statusCode': 200,
-                   'headers': {
-                       'Content-Type': 'application/json',
-                       'Access-Control-Allow-Origin': '*'
-                   },
-                   'body': json.dumps({
-                       'tasks': response['Items'],
-                       'count': len(response['Items'])
-                   }, cls=DecimalEncoder)
-               }
-               
-       except Exception as e:
-           print(f"Error: {str(e)}")
-           return {
-               'statusCode': 500,
-               'headers': {
-                   'Content-Type': 'application/json',
-                   'Access-Control-Allow-Origin': '*'
-               },
-               'body': json.dumps({
-                   'error': 'Internal server error',
-                   'message': str(e)
-               })
-           }
-   ```
-
-3. **Deploy and Test:**
-   - Click **Deploy**
-   - Test with empty event `{}`
+4. **Deploy and Test:**
+   - Test with empty event: `{}`
 
 ### Step 3: Create Task Update Function
 1. **Create New Function:**
@@ -267,97 +134,11 @@ You can add sample data later through the Lambda functions we'll create.
    - Use same runtime and role
 
 2. **Function Code:**
-   ```python
-   import json
-   import boto3
-   from datetime import datetime
-   from decimal import Decimal
+   Use the update task function code from `lambda-functions/update_task.py`
 
-   # Initialize DynamoDB resource
-   dynamodb = boto3.resource('dynamodb')
-   table = dynamodb.Table('USERNAME-tasks')  # Replace USERNAME with your username
-
-   class DecimalEncoder(json.JSONEncoder):
-       def default(self, obj):
-           if isinstance(obj, Decimal):
-               return float(obj)
-           return super(DecimalEncoder, self).default(obj)
-
-   def lambda_handler(event, context):
-       try:
-           # Get task ID from path parameters
-           if 'pathParameters' not in event or not event['pathParameters'] or 'taskId' not in event['pathParameters']:
-               return {
-                   'statusCode': 400,
-                   'headers': {
-                       'Content-Type': 'application/json',
-                       'Access-Control-Allow-Origin': '*'
-                   },
-                   'body': json.dumps({'error': 'Task ID is required'})
-               }
-           
-           task_id = event['pathParameters']['taskId']
-           body = json.loads(event['body'])
-           
-           # Build update expression
-           update_expression = "SET updatedAt = :updatedAt"
-           expression_values = {':updatedAt': datetime.now().isoformat()}
-           
-           if 'title' in body:
-               update_expression += ", title = :title"
-               expression_values[':title'] = body['title']
-           
-           if 'description' in body:
-               update_expression += ", description = :description"
-               expression_values[':description'] = body['description']
-           
-           if 'status' in body:
-               update_expression += ", #status = :status"
-               expression_values[':status'] = body['status']
-           
-           if 'priority' in body:
-               update_expression += ", priority = :priority"
-               expression_values[':priority'] = body['priority']
-           
-           # Update item
-           response = table.update_item(
-               Key={'taskId': task_id},
-               UpdateExpression=update_expression,
-               ExpressionAttributeValues=expression_values,
-               ExpressionAttributeNames={'#status': 'status'} if 'status' in body else None,
-               ReturnValues='ALL_NEW'
-           )
-           
-           return {
-               'statusCode': 200,
-               'headers': {
-                   'Content-Type': 'application/json',
-                   'Access-Control-Allow-Origin': '*'
-               },
-               'body': json.dumps({
-                   'message': 'Task updated successfully',
-                   'task': response['Attributes']
-               }, cls=DecimalEncoder)
-           }
-           
-       except Exception as e:
-           print(f"Error: {str(e)}")
-           return {
-               'statusCode': 500,
-               'headers': {
-                   'Content-Type': 'application/json',
-                   'Access-Control-Allow-Origin': '*'
-               },
-               'body': json.dumps({
-                   'error': 'Internal server error',
-                   'message': str(e)
-               })
-           }
-   ```
-
-3. **Deploy and Test:**
-   - Click **Deploy**
-   - Test with path parameters and body
+3. **Configure and Test:**
+   - Add TABLE_NAME environment variable
+   - Test with appropriate event data
 
 ### Step 4: Create Task Deletion Function
 1. **Create New Function:**
@@ -365,107 +146,57 @@ You can add sample data later through the Lambda functions we'll create.
    - Use same runtime and role
 
 2. **Function Code:**
-   ```python
-   import json
-   import boto3
+   Use the delete task function code from `lambda-functions/delete_task.py`
 
-   # Initialize DynamoDB resource
-   dynamodb = boto3.resource('dynamodb')
-   table = dynamodb.Table('USERNAME-tasks')  # Replace USERNAME with your username
-
-   def lambda_handler(event, context):
-       try:
-           # Get task ID from path parameters
-           if 'pathParameters' not in event or not event['pathParameters'] or 'taskId' not in event['pathParameters']:
-               return {
-                   'statusCode': 400,
-                   'headers': {
-                       'Content-Type': 'application/json',
-                       'Access-Control-Allow-Origin': '*'
-                   },
-                   'body': json.dumps({'error': 'Task ID is required'})
-               }
-           
-           task_id = event['pathParameters']['taskId']
-           
-           # Delete item
-           table.delete_item(Key={'taskId': task_id})
-           
-           return {
-               'statusCode': 200,
-               'headers': {
-                   'Content-Type': 'application/json',
-                   'Access-Control-Allow-Origin': '*'
-               },
-               'body': json.dumps({
-                   'message': 'Task deleted successfully',
-                   'taskId': task_id
-               })
-           }
-           
-       except Exception as e:
-           print(f"Error: {str(e)}")
-           return {
-               'statusCode': 500,
-               'headers': {
-                   'Content-Type': 'application/json',
-                   'Access-Control-Allow-Origin': '*'
-               },
-               'body': json.dumps({
-                   'error': 'Internal server error',
-                   'message': str(e)
-               })
-           }
-   ```
-
-3. **Deploy the function**
+3. **Configure and Test:**
+   - Add TABLE_NAME environment variable
+   - Test with task ID parameter
 
 ---
 
-## Task 4: API Gateway Setup (10 minutes)
+## Task 4: API Gateway Setup (8 minutes)
 
 ### Step 1: Create REST API
 1. **Navigate to API Gateway:**
-   - Search for "API Gateway" in AWS console
-   - Click **Create API**
-   - Choose **REST API** (not REST API Private)
-   - Click **Build**
+   - In the AWS Management Console, search for "API Gateway"
+   - Click **API Gateway**
 
-2. **API Configuration:**
+2. **Create API:**
+   - Click **Create API**
+   - **REST API** → **Build**
    - **API name:** `USERNAME-tasks-api` ⚠️ **Replace USERNAME with your assigned username**
-   - **Description:** `RESTful API for task management`
-   - **Endpoint Type:** Regional
+   - **Description:** Task management serverless API
    - Click **Create API**
 
 ### Step 2: Create Resources and Methods
-1. **Create Tasks Resource:**
+
+1. **Create /tasks Resource:**
    - Click **Actions** → **Create Resource**
-   - **Resource Name:** `tasks`
-   - **Resource Path:** `/tasks`
-   - **Enable API Gateway CORS:** ✓ Check this
+   - **Resource Name:** tasks
+   - **Resource Path:** /tasks
+   - **Enable CORS:** Check this option
    - Click **Create Resource**
 
-2. **Create Task Item Resource:**
+2. **Create /{taskId} Resource:**
    - Select `/tasks` resource
    - Click **Actions** → **Create Resource**
-   - **Resource Name:** `task`
-   - **Resource Path:** `/{taskId}`
-   - **Enable API Gateway CORS:** ✓ Check this
+   - **Resource Name:** taskId
+   - **Resource Path:** /{taskId}
+   - **Enable CORS:** Check this option
    - Click **Create Resource**
 
 ### Step 3: Configure Methods
-1. **POST Method for Creating Tasks:**
+
+1. **POST Method on /tasks:**
    - Select `/tasks` resource
    - Click **Actions** → **Create Method**
    - Select **POST** from dropdown
-   - Click the checkmark
    - **Integration type:** Lambda Function
-   - **Lambda Region:** us-east-1
    - **Lambda Function:** `USERNAME-create-task` ⚠️ **Use your username**
    - Click **Save**
-   - Click **OK** to grant permission
+   - Click **OK** to give permission
 
-2. **GET Method for Listing Tasks:**
+2. **GET Method on /tasks:**
    - Select `/tasks` resource
    - Click **Actions** → **Create Method**
    - Select **GET** from dropdown
@@ -473,7 +204,7 @@ You can add sample data later through the Lambda functions we'll create.
    - **Lambda Function:** `USERNAME-get-tasks` ⚠️ **Use your username**
    - Click **Save**
 
-3. **GET Method for Single Task:**
+3. **GET Method on /{taskId}:**
    - Select `/{taskId}` resource
    - Click **Actions** → **Create Method**
    - Select **GET** from dropdown
@@ -481,7 +212,7 @@ You can add sample data later through the Lambda functions we'll create.
    - **Lambda Function:** `USERNAME-get-tasks` ⚠️ **Use your username**
    - Click **Save**
 
-4. **PUT Method for Updating Tasks:**
+4. **PUT Method on /{taskId}:**
    - Select `/{taskId}` resource
    - Click **Actions** → **Create Method**
    - Select **PUT** from dropdown
@@ -489,7 +220,7 @@ You can add sample data later through the Lambda functions we'll create.
    - **Lambda Function:** `USERNAME-update-task` ⚠️ **Use your username**
    - Click **Save**
 
-5. **DELETE Method for Deleting Tasks:**
+5. **DELETE Method on /{taskId}:**
    - Select `/{taskId}` resource
    - Click **Actions** → **Create Method**
    - Select **DELETE** from dropdown
@@ -498,123 +229,50 @@ You can add sample data later through the Lambda functions we'll create.
    - Click **Save**
 
 ### Step 4: Deploy API
-1. **Create Deployment:**
+1. **Deploy to Stage:**
    - Click **Actions** → **Deploy API**
    - **Deployment stage:** [New Stage]
-   - **Stage name:** `dev`
-   - **Stage description:** `Development stage`
+   - **Stage name:** dev
    - Click **Deploy**
 
-2. **Note API URL:**
-   - Copy the **Invoke URL** from the stage details
-   - Format: `https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/dev`
+2. **Note Invoke URL:**
+   - Copy the Invoke URL for testing
+   - Format: `https://YOUR_API_ID.execute-api.us-east-1.amazonaws.com/dev`
 
 ---
 
-## Task 5: API Testing and Validation (10 minutes)
+## Task 5: API Testing and Validation (2 minutes)
 
-### Step 1: Test with AWS Console
+### Step 1: Test API Endpoints
 1. **Test POST /tasks:**
-   - In API Gateway, select POST method under `/tasks`
+   - In API Gateway console, select POST method under `/tasks`
    - Click **TEST**
    - **Request Body:**
    ```json
    {
-     "title": "Complete AWS Lab",
-     "description": "Finish Lambda and API Gateway lab",
-     "status": "in-progress",
-     "priority": "high"
+     "title": "Test Task",
+     "description": "Testing API integration",
+     "status": "pending",
+     "priority": "medium"
    }
    ```
    - Click **Test**
-   - Verify 201 response
+   - Verify 201 status code and response
 
 2. **Test GET /tasks:**
    - Select GET method under `/tasks`
    - Click **TEST**
    - Click **Test**
-   - Verify 200 response with task list
+   - Verify 200 status code and task list
 
-### Step 2: Test with External Tools (Optional)
-If you have access to curl or Postman:
+3. **Test Other Methods:**
+   - Test GET, PUT, and DELETE methods on `/{taskId}`
+   - Use task ID from previous responses
 
-```bash
-# Create a task
-curl -X POST https://YOUR_API_URL/dev/tasks \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Test Task",
-    "description": "Testing API",
-    "status": "pending",
-    "priority": "medium"
-  }'
-
-# Get all tasks
-curl https://YOUR_API_URL/dev/tasks
-
-# Update a task (replace TASK_ID)
-curl -X PUT https://YOUR_API_URL/dev/tasks/TASK_ID \
-  -H "Content-Type: application/json" \
-  -d '{
-    "status": "completed"
-  }'
-
-# Delete a task (replace TASK_ID)
-curl -X DELETE https://YOUR_API_URL/dev/tasks/TASK_ID
-```
-
-### Step 3: Verify DynamoDB Data
-1. **Check DynamoDB Table:**
-   - Go to DynamoDB console
-   - Select your `USERNAME-tasks` table
-   - Click **Explore table items**
-   - Verify tasks are being stored correctly
-
----
-
-## Advanced Exercise (Optional)
-
-### Add Request Validation
-1. **Create Model in API Gateway:**
-   - Go to your API in API Gateway
-   - Click **Models**
-   - Click **Create**
-   - **Model name:** `TaskModel`
-   - **Content type:** `application/json`
-   - **Model schema:**
-   ```json
-   {
-     "$schema": "http://json-schema.org/draft-04/schema#",
-     "title": "Task Schema",
-     "type": "object",
-     "properties": {
-       "title": {
-         "type": "string",
-         "minLength": 1,
-         "maxLength": 100
-       },
-       "description": {
-         "type": "string",
-         "maxLength": 500
-       },
-       "status": {
-         "type": "string",
-         "enum": ["pending", "in-progress", "completed"]
-       },
-       "priority": {
-         "type": "string",
-         "enum": ["low", "medium", "high"]
-       }
-     },
-     "required": ["title"]
-   }
-   ```
-
-2. **Apply Validation:**
-   - Go to POST method under `/tasks`
-   - Click **Method Request**
-   - **Request Validator:** Validate body
-   - **Request Body:** Add model for `application/json`
+### Step 2: External Testing (Optional)
+Use the provided `test-api.py` script for comprehensive testing:
+1. Update API_URL in the script
+2. Run: `python3 test-api.py`
 
 ---
 

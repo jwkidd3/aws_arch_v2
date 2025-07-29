@@ -2,10 +2,12 @@ import json
 import boto3
 import uuid
 from datetime import datetime
+import os
 
 # Initialize DynamoDB resource
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('USERNAME-tasks')  # Replace USERNAME with your username
+table_name = os.environ['TABLE_NAME']
+table = dynamodb.Table(table_name)
 
 def lambda_handler(event, context):
     try:

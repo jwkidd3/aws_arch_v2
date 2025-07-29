@@ -4,81 +4,71 @@
 
 ## Checklist
 
-### Task 1: Terraform Installation and Setup
-- [ ] Launched EC2 instance: `USERNAME-terraform-instance` (with your username)
-- [ ] Connected to instance successfully
-- [ ] Installed Terraform successfully
-- [ ] Configured AWS CLI with proper credentials
-- [ ] Verified setup with `terraform version` and `aws sts get-caller-identity`
-- [ ] Created lab directory structure
-
-### Task 2: Basic Terraform Configuration
-- [ ] Created main.tf with basic AWS resources
-- [ ] Replaced all USERNAME placeholders with actual username
+### Task 1: Basic Terraform Configuration (15 minutes)
+- [ ] Opened Cloud9 environment
+- [ ] Verified Terraform with `terraform version`
+- [ ] Navigated to terraform-configs/basic directory
+- [ ] Reviewed main.tf and outputs.tf files
+- [ ] Replaced USERNAME placeholders with actual username
 - [ ] Successfully ran `terraform init`
-- [ ] Successfully ran `terraform validate`
 - [ ] Successfully ran `terraform plan`
 - [ ] Successfully ran `terraform apply`
-- [ ] Verified resources in AWS Console (S3 bucket, EC2 instance, Security Group)
-- [ ] Tested web server functionality
+- [ ] Verified resources in AWS Console
+- [ ] Tested website URL from output
 
-### Task 3: Variables and Outputs
-- [ ] Created variables.tf with input variables
-- [ ] Created outputs.tf with useful outputs
-- [ ] Created main.tf using variables
-- [ ] Created user_data.sh script with templating
-- [ ] Created terraform.tfvars file with values
-- [ ] Successfully deployed with variables
-- [ ] Tested all outputs work correctly
-- [ ] Modified configuration and redeployed
-- [ ] Verified changes applied correctly
+### Task 2: Working with Variables (10 minutes)
+- [ ] Navigated to terraform-configs/variables directory
+- [ ] Reviewed variables.tf, main.tf, outputs.tf, and terraform.tfvars files
+- [ ] Replaced USERNAME placeholders in all files
+- [ ] Successfully ran `terraform init`
+- [ ] Successfully ran `terraform plan -var-file="terraform.tfvars"`
+- [ ] Successfully ran `terraform apply -var-file="terraform.tfvars"`
+- [ ] Tested all outputs including resource_summary
+- [ ] Verified variable values in deployed resources
 
-### Advanced Exercise: VPC Creation
-- [ ] Created comprehensive VPC configuration
-- [ ] Deployed VPC infrastructure with Terraform
-- [ ] Verified VPC, subnets, and routing created correctly
-- [ ] Understood resource dependencies and relationships
+### Task 3: Quick VPC Example (5 minutes)
+- [ ] Navigated to terraform-configs/vpc directory
+- [ ] Reviewed main.tf and outputs.tf files
+- [ ] Replaced USERNAME placeholders
+- [ ] Successfully ran `terraform init`
+- [ ] Successfully ran `terraform plan`
+- [ ] Successfully ran `terraform apply`
+- [ ] Verified VPC creation in AWS Console
+- [ ] Tested VPC outputs
 
 ### Cleanup
-- [ ] Destroyed all VPC example resources
-- [ ] Destroyed all variables example resources
-- [ ] Destroyed all basic example resources
-- [ ] Verified cleanup in AWS Console
-- [ ] Terminated lab EC2 instance
-- [ ] Removed all lab files
+- [ ] Successfully destroyed VPC resources
+- [ ] Successfully destroyed variables example resources
+- [ ] Successfully destroyed basic example resources
+- [ ] Confirmed all resources deleted in AWS Console
+- [ ] No unexpected charges incurred
 
 ## Notes
 
 **Your Username:** ________________
 
-**Resource Names (with your username):**
-- Terraform Instance: ________________-terraform-instance
-- Security Group: ________________-terraform-sg
-- S3 Bucket: ________________-terraform-lab-bucket-xxxxxxxx
-- Basic Instance: ________________-terraform-instance
-- VPC: ________________-terraform-vpc
+**Key Resources Created:**
+- S3 Bucket: ________________
+- EC2 Instance: ________________
+- Security Group: ________________
+- VPC: ________________
 
-**Key Commands Used:**
-- terraform init: ________________
-- terraform plan: ________________
-- terraform apply: ________________
-- terraform destroy: ________________
+**Terraform Commands Used:**
+- terraform init: ✓ / ✗
+- terraform plan: ✓ / ✗
+- terraform apply: ✓ / ✗
+- terraform destroy: ✓ / ✗
 
-**Terraform Outputs Tested:**
+**Outputs Tested:**
 - instance_public_ip: ________________
 - website_url: ________________
+- s3_bucket_name: ________________
 - vpc_id: ________________
 
 **Issues Encountered:**
 
 
-**Solutions Applied:**
-
-
-**Key Insights About IaC:**
-
-
-**Terraform vs CloudFormation Observations:**
+**Key Insights:**
 
 
 **Time Completed:** ________________

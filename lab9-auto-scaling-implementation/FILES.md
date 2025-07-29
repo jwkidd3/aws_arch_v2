@@ -6,6 +6,8 @@ This directory contains all files needed for Lab 9: Auto Scaling Implementation.
 
 - **README.md** - Complete lab instructions and procedures
 - **lab-progress.md** - Progress tracking checklist
+- **terraform-examples.tf** - Terraform code examples (advanced)
+- **cloudwatch-monitoring.md** - CloudWatch monitoring guide
 - **FILES.md** - This file, describing all lab files
 
 ## Lab Overview
@@ -33,6 +35,7 @@ This lab focuses on:
 2. Use **lab-progress.md** to track your progress
 3. Remember to replace USERNAME with your assigned username throughout
 4. Follow cleanup instructions carefully to remove all resources
+5. Use **cloudwatch-monitoring.md** for advanced monitoring setup
 
 ## Important Notes
 
@@ -65,4 +68,6 @@ CPU < 50% for 5 minutes → Scale In
 Cooldown: 300 seconds
 Warmup: 300 seconds
 ```
+
+This lab demonstrates enterprise-grade auto scaling patterns and prepares you for production workloads.
 

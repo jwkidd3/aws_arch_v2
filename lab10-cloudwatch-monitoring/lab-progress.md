@@ -2,6 +2,10 @@
 
 **Important:** Replace USERNAME with your assigned username (e.g., user1, user2, user3) throughout this lab.
 
+**Your Username:** ________________
+
+**Start Time:** ________________
+
 ## Checklist
 
 ### Task 1: CloudWatch Dashboard Creation

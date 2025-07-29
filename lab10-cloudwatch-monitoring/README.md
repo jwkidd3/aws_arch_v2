@@ -32,30 +32,20 @@ After completing this lab, you will be able to:
    - Ensure you have at least one running instance from previous labs
    - If no instances are running, launch a t2.micro instance: `USERNAME-monitor-test` ⚠️ **Replace USERNAME with your assigned username**
 
-2. **Generate Some Activity:**
-   - Connect to your EC2 instance via EC2 Instance Connect
-   - Run some CPU and memory intensive commands to generate metrics:
+2. **Generate Activity for Monitoring:**
    ```bash
-   # Generate CPU load
-   stress --cpu 1 --timeout 300s &
+   # SSH into your instance and run:
+   sudo yum update -y
+   sudo yum install -y stress htop
    
-   # If stress is not available, use alternative
-   yes > /dev/null &
-   sleep 60
-   kill %1
-   
-   # Generate some disk I/O
-   dd if=/dev/zero of=/tmp/testfile bs=1M count=100
-   rm /tmp/testfile
-   
-   # Check system resources
-   top
+   # Generate some CPU activity
+   stress --cpu 1 --timeout 60s
    ```
 
-### Step 2: Create Custom CloudWatch Dashboard
+### Step 2: Create CloudWatch Dashboard
 1. **Navigate to CloudWatch:**
-   - In AWS Management Console, search for **CloudWatch**
-   - Click on **CloudWatch** to open the dashboard
+   - In the AWS Management Console, search for "CloudWatch"
+   - Click on **CloudWatch** to open the service
 
 2. **Create New Dashboard:**
    - In the left navigation, click **Dashboards**
@@ -63,246 +53,209 @@ After completing this lab, you will be able to:
    - **Dashboard name:** `USERNAME-monitoring-dashboard` ⚠️ **Replace USERNAME with your assigned username**
    - Click **Create dashboard**
 
-3. **Add EC2 CPU Utilization Widget:**
-   - Click **Add widget**
-   - Select **Line** graph type
-   - Click **Configure**
-   - **Data source:** Metrics
-   - **Metrics tab:**
-     - Browse metrics → **EC2** → **Per-Instance Metrics**
-     - Find your instance and select **CPUUtilization**
-     - Click **Create widget**
-   - **Widget title:** `USERNAME EC2 CPU Utilization` ⚠️ **Replace USERNAME with your assigned username**
+3. **Add CPU Utilization Widget:**
+   - Select **Line** widget type
+   - **Metrics** → **EC2** → **Per-Instance Metrics**
+   - Find your instance and select **CPUUtilization**
+   - **Widget title:** "EC2 CPU Utilization"
+   - Click **Create widget**
 
-4. **Add Memory and Network Widgets:**
-   - Click **Add widget** again
-   - Add **NetworkIn** and **NetworkOut** metrics for your instance
-   - Create separate widgets for different metric types
-   - Organize widgets in a logical layout
+4. **Add Network I/O Widget:**
+   - Click **Add widget** → **Line**
+   - Select **EC2** → **Per-Instance Metrics**
+   - For your instance, select both:
+     - **NetworkIn**
+     - **NetworkOut**
+   - **Widget title:** "Network I/O"
+   - Click **Create widget**
 
-5. **Add Number Widget for Instance Status:**
-   - Click **Add widget**
-   - Select **Number** widget type
-   - Add **StatusCheckFailed** metric
-   - Configure to show current status
+5. **Add Status Check Widget:**
+   - Click **Add widget** → **Number**
+   - Select **EC2** → **Per-Instance Metrics**
+   - For your instance, select:
+     - **StatusCheckFailed**
+     - **StatusCheckFailed_Instance**
+     - **StatusCheckFailed_System**
+   - **Widget title:** "Status Checks"
+   - Click **Create widget**
 
-6. **Save Dashboard:**
+6. **Add Text Widget for Documentation:**
+   - Click **Add widget** → **Text**
+   - Add documentation about your dashboard:
+   ```markdown
+   # USERNAME Monitoring Dashboard
+   
+   **Instance:** USERNAME-monitor-test
+   **Purpose:** Comprehensive infrastructure monitoring
+   **Last Updated:** [Current Date]
+   
+   ## Widgets:
+   - CPU Utilization: Real-time CPU usage
+   - Network I/O: Inbound/outbound traffic
+   - Status Checks: Instance and system health
+   ```
+   - Click **Create widget**
+
+7. **Save Dashboard:**
    - Click **Save dashboard**
-   - Your dashboard should now display multiple monitoring widgets
-
-### Step 3: Enhanced Dashboard with Custom Metrics
-1. **Add CloudWatch Logs Insights Widget:**
-   - Click **Add widget**
-   - Select **Logs table** widget
-   - Configure to show recent log entries (if available)
-
-2. **Add Text Widget for Documentation:**
-   - Click **Add widget**
-   - Select **Text** widget
-   - Add documentation about your monitoring setup:
-   ```
-   ## USERNAME Monitoring Dashboard
-   
-   **Purpose:** Monitor EC2 instance performance and health
-   **Owner:** USERNAME
-   **Created:** [Current Date]
-   
-   **Widgets:**
-   - CPU Utilization: Monitor processor usage
-   - Network I/O: Track network traffic
-   - Status Checks: Instance health monitoring
-   
-   **Alarm Thresholds:**
-   - CPU > 80% for 5 minutes
-   - Status check failures
-   ```
 
 ---
 
 ## Task 2: CloudWatch Alarms and SNS Configuration (20 minutes)
 
-### Step 1: Create SNS Topic for Notifications
+### Step 1: Create SNS Topic for Alerts
 1. **Navigate to SNS:**
-   - Search for **SNS** in the AWS Management Console
-   - Click on **Simple Notification Service**
+   - In AWS Console, search for "SNS"
+   - Click **Simple Notification Service**
 
-2. **Create SNS Topic:**
-   - Click **Topics** in left navigation
+2. **Create Topic:**
    - Click **Create topic**
    - **Type:** Standard
    - **Name:** `USERNAME-monitoring-alerts` ⚠️ **Replace USERNAME with your assigned username**
-   - **Display name:** `USERNAME Monitoring Alerts` ⚠️ **Replace USERNAME with your assigned username**
+   - **Display name:** `USERNAME Monitoring Alerts`
    - Click **Create topic**
 
 3. **Create Email Subscription:**
-   - Click on your newly created topic
-   - Click **Create subscription**
+   - In your topic, click **Create subscription**
    - **Protocol:** Email
-   - **Endpoint:** Enter a valid email address you can access
+   - **Endpoint:** Your email address
    - Click **Create subscription**
-   - **Important:** Check your email and confirm the subscription
+   - **Check your email** and click the confirmation link
 
 ### Step 2: Create CloudWatch Alarms
-1. **Return to CloudWatch:**
-   - Navigate back to **CloudWatch** service
-   - Click **Alarms** in left navigation
+1. **Navigate Back to CloudWatch:**
+   - Go to CloudWatch console
+   - Click **Alarms** → **All alarms**
+
+2. **Create CPU Utilization Alarm:**
    - Click **Create alarm**
-
-2. **Configure CPU Utilization Alarm:**
+   - **Select metric** → **EC2** → **Per-Instance Metrics**
+   - Select your instance and **CPUUtilization**
    - Click **Select metric**
-   - **EC2** → **Per-Instance Metrics**
-   - Select your instance's **CPUUtilization** metric
-   - Click **Select metric**
-
-3. **Define Alarm Conditions:**
+   
+   **Configure Alarm:**
    - **Statistic:** Average
    - **Period:** 5 minutes
    - **Threshold type:** Static
-   - **Whenever CPUUtilization is:** Greater than 80
-   - **Additional configuration:**
-     - **Datapoints to alarm:** 2 out of 3
-     - **Missing data treatment:** Treat missing data as not breaching
-
-4. **Configure Actions:**
-   - **Alarm state trigger:** In alarm
-   - **Select an SNS topic:** Use existing topic
-   - **SNS topic:** Select your `USERNAME-monitoring-alerts` topic
-   - **Auto Scaling action:** None (for now)
-   - **EC2 action:** None (for now)
-
-5. **Add Alarm Details:**
-   - **Alarm name:** `USERNAME-high-cpu-alarm` ⚠️ **Replace USERNAME with your assigned username**
-   - **Alarm description:** `Alert when USERNAME instance CPU exceeds 80%` ⚠️ **Replace USERNAME with your assigned username**
-   - Click **Create alarm**
-
-### Step 3: Create Additional Alarms
-1. **Status Check Alarm:**
-   - Create another alarm for **StatusCheckFailed_System**
-   - **Threshold:** Greater than or equal to 1
-   - **Period:** 1 minute
-   - **Alarm name:** `USERNAME-status-check-alarm` ⚠️ **Replace USERNAME with your assigned username**
-
-2. **Network Traffic Alarm:**
-   - Create alarm for **NetworkOut** 
-   - **Threshold:** Greater than 1000000 bytes (1MB)
-   - **Period:** 5 minutes
-   - **Alarm name:** `USERNAME-high-network-alarm` ⚠️ **Replace USERNAME with your assigned username**
-
-### Step 4: Test Alarm Functionality
-1. **Generate High CPU Load:**
-   - Connect to your EC2 instance
-   - Run CPU-intensive command:
-   ```bash
-   # Generate sustained CPU load
-   stress --cpu 2 --timeout 600s
+   - **Condition:** Greater than **80**
+   - Click **Next**
    
-   # Alternative if stress not available
-   yes > /dev/null &
-   yes > /dev/null &
-   # Let it run for 10-15 minutes to trigger alarm
-   ```
+   **Configure Actions:**
+   - **Alarm state trigger:** In alarm
+   - **SNS topic:** Select `USERNAME-monitoring-alerts`
+   - Click **Next**
+   
+   **Add Name and Description:**
+   - **Alarm name:** `USERNAME-high-cpu-alarm` ⚠️ **Replace USERNAME with your assigned username**
+   - **Description:** "Alert when CPU utilization exceeds 80%"
+   - Click **Next** → **Create alarm**
 
-2. **Monitor Alarm States:**
-   - Return to CloudWatch Alarms
-   - Refresh the page periodically
-   - Watch for alarm state changes: OK → ALARM
+3. **Create Status Check Alarm:**
+   - Click **Create alarm**
+   - **Select metric** → **EC2** → **Per-Instance Metrics**
+   - Select your instance and **StatusCheckFailed**
+   - Click **Select metric**
+   
+   **Configure Alarm:**
+   - **Statistic:** Maximum
+   - **Period:** 1 minute
+   - **Threshold type:** Static
+   - **Condition:** Greater than **0**
+   - Click **Next**
+   
+   **Configure Actions:**
+   - **SNS topic:** Select `USERNAME-monitoring-alerts`
+   - Click **Next**
+   
+   **Add Name:**
+   - **Alarm name:** `USERNAME-status-check-alarm` ⚠️ **Replace USERNAME with your assigned username**
+   - **Description:** "Alert when instance status checks fail"
+   - Click **Next** → **Create alarm**
+
+4. **Create Network Traffic Alarm:**
+   - Click **Create alarm**
+   - **Select metric** → **EC2** → **Per-Instance Metrics**
+   - Select your instance and **NetworkIn**
+   - Click **Select metric**
+   
+   **Configure Alarm:**
+   - **Statistic:** Sum
+   - **Period:** 5 minutes
+   - **Threshold type:** Static
+   - **Condition:** Greater than **100000000** (100MB)
+   - Click **Next**
+   
+   **Configure Actions:**
+   - **SNS topic:** Select `USERNAME-monitoring-alerts`
+   - Click **Next**
+   
+   **Add Name:**
+   - **Alarm name:** `USERNAME-high-network-alarm` ⚠️ **Replace USERNAME with your assigned username**
+   - **Description:** "Alert when network traffic is high"
+   - Click **Next** → **Create alarm**
+
+### Step 3: Test Alarm Functionality
+1. **Generate High CPU Load:**
+   - SSH into your EC2 instance
+   - Run: `stress --cpu 2 --timeout 600s` (10 minutes of load)
+   - Monitor the alarm in CloudWatch console
+   - Wait 5-10 minutes for alarm to trigger
+
+2. **Verify Email Notification:**
    - Check your email for alarm notifications
+   - Verify alarm state changes from OK to ALARM
 
-3. **Stop High Load:**
-   ```bash
-   # Stop the stress test
-   pkill stress
-   # or kill the yes processes
-   pkill yes
-   ```
+3. **Stop Load and Verify Recovery:**
+   - Stop the stress test (Ctrl+C if needed)
+   - Wait for alarm to return to OK state
+   - Verify recovery email notification
 
 ---
 
 ## Task 3: CloudWatch Logs and Custom Metrics (10 minutes)
 
-### Step 1: Install CloudWatch Agent (Optional - if time permits)
-1. **Install CloudWatch Agent:**
+### Step 1: Custom Metrics (Optional Advanced Exercise)
+1. **Install AWS CLI on Instance (if not present):**
    ```bash
-   # Download and install CloudWatch agent
-   wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
-   sudo rpm -U ./amazon-cloudwatch-agent.rpm
+   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+   unzip awscliv2.zip
+   sudo ./aws/install
    ```
 
-2. **Basic Configuration:**
+2. **Send Custom Metrics:**
    ```bash
-   # Create basic config (simplified for lab)
-   sudo tee /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json > /dev/null << 'JSON'
-   {
-       "metrics": {
-           "namespace": "USERNAME/CustomMetrics",
-           "metrics_collected": {
-               "mem": {
-                   "measurement": ["mem_used_percent"]
-               },
-               "disk": {
-                   "measurement": ["used_percent"],
-                   "metrics_collection_interval": 300,
-                   "resources": ["*"]
-               }
-           }
-       },
-       "logs": {
-           "logs_collected": {
-               "files": {
-                   "collect_list": [
-                       {
-                           "file_path": "/var/log/messages",
-                           "log_group_name": "USERNAME-system-logs",
-                           "log_stream_name": "{instance_id}"
-                       }
-                   ]
-               }
-           }
-       }
-   }
-JSON
-   ```
-
-### Step 2: Custom Metrics via CLI
-1. **Send Custom Metrics:**
-   ```bash
-   # Send custom metric data
+   # Send custom application metrics
    aws cloudwatch put-metric-data \
-       --namespace "USERNAME/Application" \
-       --metric-data MetricName=CustomTestMetric,Value=100,Unit=Count
+       --namespace "USERNAME/CustomApp" \
+       --metric-data MetricName=UserLogins,Value=25,Unit=Count
    
-   # Send custom metric with dimensions
    aws cloudwatch put-metric-data \
-       --namespace "USERNAME/Application" \
-       --metric-data MetricName=UserActivity,Value=25,Unit=Count,Dimensions=Action=Login
+       --namespace "USERNAME/CustomApp" \
+       --metric-data MetricName=ResponseTime,Value=150,Unit=Milliseconds
    ```
 
-2. **Verify Custom Metrics:**
-   - Go to CloudWatch → Metrics
-   - Browse metrics → Custom namespaces
-   - Find your custom namespace: `USERNAME/Application`
-   - Add these metrics to your dashboard
+3. **View Custom Metrics:**
+   - In CloudWatch console, go to **Metrics**
+   - Look for **Custom Namespaces** → **USERNAME/CustomApp**
+   - Add custom metrics to your dashboard
 
-### Step 3: CloudWatch Insights (if Log Groups exist)
-1. **Use CloudWatch Logs Insights:**
-   - Navigate to CloudWatch → Logs → Insights
-   - If you have log groups, try these sample queries:
-   ```
-   fields @timestamp, @message
-   | filter @message like /ERROR/
-   | sort @timestamp desc
-   | limit 20
+### Step 2: CloudWatch Logs (Optional)
+1. **Install CloudWatch Agent (Advanced):**
+   ```bash
+   sudo yum install -y amazon-cloudwatch-agent
+   sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard
    ```
 
-   ```
-   stats count() by bin(5m)
-   ```
+2. **Basic Log Monitoring:**
+   - Create log groups in CloudWatch Logs
+   - Configure log streams for application logs
+   - Use CloudWatch Logs Insights for log analysis
 
 ---
 
 ## Advanced Exercises (Optional)
 
-### Exercise 1: Automated Responses with CloudWatch Events
+### Exercise 1: CloudWatch Events
 1. **Create CloudWatch Event Rule:**
    - Navigate to CloudWatch → Events → Rules
    - Create rule for EC2 instance state changes
@@ -400,39 +353,22 @@ JSON
    - Using CloudWatch Logs for centralized logging
    - Implementing log analysis with CloudWatch Insights
 
-4. **Operational Excellence:**
-   - Implementing monitoring best practices
-   - Creating actionable alerts and dashboards
-   - Building automated response systems
+4. **Monitoring Strategy:**
+   - Implementing proactive monitoring and alerting
+   - Dashboard design for effective visualization
+   - Alarm configuration with appropriate thresholds
+   - Custom metrics for application-specific monitoring
+   - Automation using CloudWatch for automated responses
 
-5. **Cost and Performance Optimization:**
-   - Monitoring resource utilization trends
-   - Setting up cost alerts and budgets
-   - Identifying optimization opportunities
+## Summary
 
----
+You have successfully:
+- ✅ Created a comprehensive CloudWatch dashboard
+- ✅ Configured CloudWatch alarms with email notifications
+- ✅ Set up SNS for alert distribution
+- ✅ Implemented custom metrics (optional)
+- ✅ Tested alarm functionality and notifications
+- ✅ Learned monitoring best practices
 
-## Validation Checklist
-
-- [ ] Created custom CloudWatch dashboard with multiple widgets
-- [ ] Configured SNS topic with email subscription
-- [ ] Set up CloudWatch alarms for CPU, status, and network metrics
-- [ ] Successfully tested alarm triggering and notifications
-- [ ] Added custom metrics to monitoring setup
-- [ ] Understood CloudWatch Logs and Insights functionality
-- [ ] Implemented proper cleanup of all resources
-
----
-
-## Next Steps
-
-- **Lab 11:** Lambda Functions & API Gateway
-- **Advanced Topics:** CloudWatch Events, automated remediation, cross-service monitoring
-- **Real-world Applications:** Enterprise monitoring strategies, compliance reporting
-
----
-
-**Lab Duration:** 45 minutes  
-**Difficulty:** Intermediate  
-**Prerequisites:** Basic understanding of AWS services, completed Labs 1-9
+This lab provides the foundation for implementing robust monitoring and alerting in production AWS environments.
 

@@ -8,6 +8,7 @@ This directory contains all files needed for Lab 8: Application Load Balancer Se
 - **lab-progress.md** - Progress tracking checklist
 - **terraform-examples.tf** - Terraform code examples for ALB
 - **cloudwatch-monitoring.md** - CloudWatch monitoring guide
+- **troubleshooting-guide.md** - Common issues and solutions
 - **FILES.md** - This file, describing all lab files
 
 ## Lab Overview
@@ -34,6 +35,7 @@ This lab focuses on:
 3. Remember to replace USERNAME with your assigned username throughout
 4. Follow cleanup instructions carefully to remove all resources
 5. Use **cloudwatch-monitoring.md** for advanced monitoring setup
+6. Refer to **troubleshooting-guide.md** if you encounter issues
 
 ## Important Notes
 
