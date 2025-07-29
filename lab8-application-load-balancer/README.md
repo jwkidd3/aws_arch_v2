@@ -130,7 +130,7 @@ We'll build a highly available web application architecture:
        </div>
    </body>
    </html>
-HTML```
+   HTML
    
    # Replace placeholders with actual values
    sed -i "s/INSTANCE_ID_PLACEHOLDER/$INSTANCE_ID/g" /var/www/html/index.html
