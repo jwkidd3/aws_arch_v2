@@ -159,7 +159,7 @@ cat > /var/www/html/index.html << 'HTML'
 </html>
 HTML
 
-# Create stress test page for load generation
+# Create CGI-enabled stress test page
 cat > /var/www/html/stress-test.html << 'HTML'
 <!DOCTYPE html>
 <html>
@@ -170,8 +170,11 @@ cat > /var/www/html/stress-test.html << 'HTML'
         .container { max-width: 800px; margin: 0 auto; }
         .button { background: #007cba; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; margin: 10px; font-size: 16px; }
         .button:hover { background: #005a87; }
+        .button.danger { background: #dc3545; }
+        .button.danger:hover { background: #c82333; }
         .status { background: white; padding: 20px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #007cba; }
         .warning { background: #fff3cd; border-left-color: #ffc107; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .output { background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; font-family: monospace; }
     </style>
 </head>
 <body>
@@ -187,21 +190,107 @@ cat > /var/www/html/stress-test.html << 'HTML'
         </div>
         
         <h3>CPU Load Tests:</h3>
-        <button class="button" onclick="alert('Light Load: stress --cpu 1 --timeout 300s')">
-            Light Load (1 CPU, 5 min)
-        </button>
-        <button class="button" onclick="alert('Heavy Load: stress --cpu 2 --timeout 600s')">
-            Heavy Load (2 CPU, 10 min)
-        </button>
-        <button class="button" onclick="alert('Stop Load: pkill -f stress')">
-            Stop Load Test
-        </button>
+        <form action="/cgi-bin/load-test.cgi" method="post" style="display: inline;">
+            <input type="hidden" name="action" value="light">
+            <button type="submit" class="button">Light Load (1 CPU, 5 min)</button>
+        </form>
+        
+        <form action="/cgi-bin/load-test.cgi" method="post" style="display: inline;">
+            <input type="hidden" name="action" value="heavy">
+            <button type="submit" class="button">Heavy Load (2 CPU, 10 min)</button>
+        </form>
+        
+        <form action="/cgi-bin/load-test.cgi" method="post" style="display: inline;">
+            <input type="hidden" name="action" value="stop">
+            <button type="submit" class="button danger">Stop All Load Tests</button>
+        </form>
+        
+        <form action="/cgi-bin/load-test.cgi" method="get" style="display: inline;">
+            <button type="submit" class="button" style="background: #28a745;">Check Status</button>
+        </form>
         
         <p><a href="/">← Back to Main Page</a></p>
     </div>
 </body>
 </html>
 HTML
+
+# Create CGI directory and script
+mkdir -p /var/www/cgi-bin
+cat > /var/www/cgi-bin/load-test.cgi << 'CGI'
+#!/bin/bash
+echo "Content-Type: text/html"
+echo ""
+
+# Parse request method and parameters
+if [ "$REQUEST_METHOD" = "POST" ]; then
+    read POST_DATA
+    ACTION=$(echo "$POST_DATA" | sed -n 's/.*action=\([^&]*\).*/\1/p')
+else
+    ACTION="status"
+fi
+
+echo "<!DOCTYPE html>"
+echo "<html><head><title>Load Test Result</title>"
+echo "<style>body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }"
+echo ".container { max-width: 800px; margin: 0 auto; }"
+echo ".result { background: white; padding: 20px; border-radius: 5px; margin: 20px 0; }"
+echo ".success { border-left: 4px solid #28a745; }"
+echo ".info { border-left: 4px solid #007cba; }"
+echo ".button { background: #007cba; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }"
+echo "</style></head><body>"
+echo "<div class='container'>"
+
+case "$ACTION" in
+    "light")
+        echo "<div class='result success'>"
+        echo "<h3>✅ Light Load Test Started</h3>"
+        echo "<p>Running: stress --cpu 1 --timeout 300s</p>"
+        nohup stress --cpu 1 --timeout 300s > /tmp/stress.log 2>&1 &
+        echo "<p>Process ID: $!</p>"
+        ;;
+    "heavy")
+        echo "<div class='result success'>"
+        echo "<h3>✅ Heavy Load Test Started</h3>"
+        echo "<p>Running: stress --cpu 2 --timeout 600s</p>"
+        nohup stress --cpu 2 --timeout 600s > /tmp/stress.log 2>&1 &
+        echo "<p>Process ID: $!</p>"
+        ;;
+    "stop")
+        echo "<div class='result success'>"
+        echo "<h3>🛑 Stopping All Load Tests</h3>"
+        pkill -f stress
+        echo "<p>All stress processes terminated</p>"
+        ;;
+    *)
+        echo "<div class='result info'>"
+        echo "<h3>📊 Current Load Test Status</h3>"
+        STRESS_PROCS=$(pgrep -f stress | wc -l)
+        if [ "$STRESS_PROCS" -gt 0 ]; then
+            echo "<p><strong>Active stress processes:</strong> $STRESS_PROCS</p>"
+            echo "<pre>$(ps aux | grep stress | grep -v grep)</pre>"
+        else
+            echo "<p>No active stress tests running</p>"
+        fi
+        ;;
+esac
+
+echo "</div>"
+echo "<p><a href='/stress-test.html' class='button'>← Back to Load Test Page</a></p>"
+echo "</div></body></html>"
+CGI
+
+# Make CGI script executable
+chmod +x /var/www/cgi-bin/load-test.cgi
+
+# Enable CGI module and configure Apache
+echo "LoadModule cgi_module modules/mod_cgi.so" >> /etc/httpd/conf/httpd.conf
+echo "ScriptAlias /cgi-bin/ /var/www/cgi-bin/" >> /etc/httpd/conf/httpd.conf
+echo "<Directory \"/var/www/cgi-bin\">" >> /etc/httpd/conf/httpd.conf
+echo "    AllowOverride None" >> /etc/httpd/conf/httpd.conf
+echo "    Options ExecCGI" >> /etc/httpd/conf/httpd.conf
+echo "    Require all granted" >> /etc/httpd/conf/httpd.conf
+echo "</Directory>" >> /etc/httpd/conf/httpd.conf
 
 # Replace placeholders with actual values
 sed -i "s/INSTANCE_ID_PLACEHOLDER/$INSTANCE_ID/g" /var/www/html/index.html
@@ -211,7 +300,13 @@ sed -i "s/INSTANCE_ID_PLACEHOLDER/$INSTANCE_ID/g" /var/www/html/stress-test.html
 
 # Set proper permissions
 chown -R apache:apache /var/www/html/
-chmod -R 644 /var/www/html/
+chown -R apache:apache /var/www/cgi-bin/
+chmod -R 777 /var/www/html/
+chmod -R 777 /var/www/cgi-bin/
+chmod +x /var/www/cgi-bin/load-test.cgi
+
+# Restart Apache to enable CGI
+systemctl restart httpd
 
 # Log completion
 echo "Launch template user data completed at $(date)" >> /var/log/launch-template.log
